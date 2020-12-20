@@ -1,3 +1,17 @@
+use itertools::Itertools;
+
+#[derive(Debug)]
+pub struct Cell {
+    x: u32,
+    y: u32,
+}
+
+impl Cell {
+    pub fn new(x: u32, y: u32) -> Cell {
+        Cell { x, y }
+    }
+}
+
 #[derive(Debug)]
 pub struct Grid {
     cells: Vec<Vec<Cell>>,
@@ -17,17 +31,16 @@ impl Grid {
 
         return Grid { cells };
     }
-}
 
-#[derive(Debug)]
-pub struct Cell {
-    x: u32,
-    y: u32,
-}
+    pub fn display(&self) -> String {
+        let x: String = self.cells.iter()
+            .map(|row| row.iter().map(|cell| ".".to_string()).intersperse(" ".to_string()).collect::<String>()).intersperse("\n".to_string()).collect();
 
-impl Cell {
-    pub fn new(x: u32, y: u32) -> Cell {
-        Cell { x, y }
+        // x.intersperse(" ").collect()
+
+        // String::from("")
+
+        format!("{}\r", x)
     }
 }
 
@@ -60,5 +73,35 @@ mod tests {
         assert_eq!(grid.cells[2].len(), 5);
         assert_eq!(grid.cells[3].len(), 5);
         assert_eq!(grid.cells[4].len(), 5);
+    }
+
+    #[test]
+    fn display_empty_grid() {
+        let grid = Grid::new(0, 0);
+
+        assert_eq!(grid.display(), "\r");
+    }
+
+    #[test]
+    fn display_one_row_grid() {
+        let grid = Grid::new(10, 1);
+
+        assert_eq!(grid.display(), ". . . . . . . . . .\r");
+    }
+
+    #[test]
+    fn display_square_grid() {
+        let grid = Grid::new(10, 10);
+
+        assert_eq!(grid.display(), ". . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .\r");
     }
 }
