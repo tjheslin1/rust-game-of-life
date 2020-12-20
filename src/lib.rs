@@ -33,14 +33,19 @@ impl Grid {
     }
 
     pub fn display(&self) -> String {
-        let x: String = self.cells.iter()
-            .map(|row| row.iter().map(|cell| ".".to_string()).intersperse(" ".to_string()).collect::<String>()).intersperse("\n".to_string()).collect();
+        let x: String = self
+            .cells
+            .iter()
+            .map(|row| {
+                row.iter()
+                    .map(|_| ".".to_string())
+                    .intersperse(" ".to_string())
+                    .collect::<String>()
+            })
+            .intersperse("\n".to_string())
+            .collect();
 
-        // x.intersperse(" ").collect()
-
-        // String::from("")
-
-        format!("{}\r", x)
+        format!("{}", x)
     }
 }
 
@@ -79,21 +84,23 @@ mod tests {
     fn display_empty_grid() {
         let grid = Grid::new(0, 0);
 
-        assert_eq!(grid.display(), "\r");
+        assert_eq!(grid.display(), "");
     }
 
     #[test]
     fn display_one_row_grid() {
         let grid = Grid::new(10, 1);
 
-        assert_eq!(grid.display(), ". . . . . . . . . .\r");
+        assert_eq!(grid.display(), ". . . . . . . . . .");
     }
 
     #[test]
     fn display_square_grid() {
         let grid = Grid::new(10, 10);
 
-        assert_eq!(grid.display(), ". . . . . . . . . .
+        assert_eq!(
+            grid.display(),
+            ". . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .
@@ -102,6 +109,7 @@ mod tests {
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .
-. . . . . . . . . .\r");
+. . . . . . . . . ."
+        );
     }
 }
