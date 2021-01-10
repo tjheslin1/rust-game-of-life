@@ -1,6 +1,9 @@
-use game_of_life::Grid;
-
 use std::{thread, time};
+
+mod grid;
+mod cell;
+
+use grid::Grid;
 
 fn main() {
     let grid = Grid::new(40, 40);
