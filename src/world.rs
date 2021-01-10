@@ -9,7 +9,7 @@ impl World {
 	}
 
 	pub fn next(&self) -> World {
-		
+		// for each cell find its neigbours
 	}
 }
 
