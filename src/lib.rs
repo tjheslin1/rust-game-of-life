@@ -1,16 +1,8 @@
 use itertools::Itertools;
 
-#[derive(Debug)]
-pub struct Cell {
-    x: u32,
-    y: u32,
-}
+mod cell;
 
-impl Cell {
-    pub fn new(x: u32, y: u32) -> Cell {
-        Cell { x, y }
-    }
-}
+use cell::Cell;
 
 #[derive(Debug)]
 pub struct Grid {
@@ -24,7 +16,7 @@ impl Grid {
         for x in 0..height {
             let mut row: Vec<Cell> = vec![];
             for y in 0..width {
-                row.push(Cell::new(x, y));
+                row.push(Cell::new(x, y,));
             }
             cells.push(row);
         }
@@ -38,7 +30,7 @@ impl Grid {
             .iter()
             .map(|row| {
                 row.iter()
-                    .map(|_| ".".to_string())
+                    .map(|cell| cell.display())
                     .intersperse(" ".to_string())
                     .collect::<String>()
             })
@@ -88,14 +80,25 @@ mod tests {
     }
 
     #[test]
-    fn display_one_row_grid() {
+    fn display_one_row_grid_of_dead_cells() {
         let grid = Grid::new(10, 1);
 
         assert_eq!(grid.display(), ". . . . . . . . . .");
     }
 
     #[test]
-    fn display_square_grid() {
+    fn display_one_row_grid_of_alive_cells() {
+        let mut grid = Grid::new(10, 1);
+
+        grid.cells = grid.cells.iter().map(|row| {
+            row.iter().map(|cell| cell.alive()).collect()
+        }).collect();
+
+        assert_eq!(grid.display(), "* * * * * * * * * *");
+    }
+
+    #[test]
+    fn display_square_grid_of_dead_cells() {
         let grid = Grid::new(10, 10);
 
         assert_eq!(
@@ -110,6 +113,31 @@ mod tests {
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . ."
+        );
+    }
+
+
+    #[test]
+    fn display_square_grid_of_alive_cells() {
+        let mut grid = Grid::new(10, 10);
+
+
+        grid.cells = grid.cells.iter().map(|row| {
+            row.iter().map(|cell| cell.alive()).collect()
+        }).collect();
+
+        assert_eq!(
+            grid.display(),
+            "* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *
+* * * * * * * * * *"
         );
     }
 }
