@@ -2,6 +2,7 @@ use std::{thread, time};
 
 mod grid;
 mod cell;
+mod world;
 
 use grid::Grid;
 

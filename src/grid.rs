@@ -2,9 +2,9 @@ use itertools::Itertools;
 
 use crate::cell::Cell;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Grid {
-    cells: Vec<Vec<Cell>>,
+    pub cells: Vec<Vec<Cell>>,
 }
 
 impl Grid {
