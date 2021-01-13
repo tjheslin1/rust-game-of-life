@@ -24,11 +24,13 @@ impl World {
 
         let mut neighbours: Vec<&Cell> = vec![];
 
-        // if cell.x > 0 {
-        // neighours.push()
-        // }
+        if (cell.x > 0) & (cell.x < (width - 1) as u32) {
+        	let left = (cell.x - 1) as usize;
 
-        vec![]
+        	neighbours.push(&self.grid.cells[cell.y as usize][left]);
+        }
+
+        neighbours
     }
 }
 

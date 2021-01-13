@@ -1,7 +1,7 @@
 #[derive(Clone, Debug, PartialEq)]
 pub struct Cell {
-    x: u32,
-    y: u32,
+    pub x: u32,
+    pub y: u32,
     alive: bool,
 }
 
