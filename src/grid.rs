@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::cell::Cell;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Grid {
     pub cells: Vec<Vec<Cell>>,
 }
@@ -14,7 +14,7 @@ impl Grid {
         for x in 0..height {
             let mut row: Vec<Cell> = vec![];
             for y in 0..width {
-                row.push(Cell::new(x, y,));
+                row.push(Cell::new(x, y));
             }
             cells.push(row);
         }
@@ -88,9 +88,11 @@ mod tests {
     fn display_one_row_grid_of_alive_cells() {
         let mut grid = Grid::new(10, 1);
 
-        grid.cells = grid.cells.iter().map(|row| {
-            row.iter().map(|cell| cell.alive()).collect()
-        }).collect();
+        grid.cells = grid
+            .cells
+            .iter()
+            .map(|row| row.iter().map(|cell| cell.alive()).collect())
+            .collect();
 
         assert_eq!(grid.display(), "* * * * * * * * * *");
     }
@@ -114,15 +116,15 @@ mod tests {
         );
     }
 
-
     #[test]
     fn display_square_grid_of_alive_cells() {
         let mut grid = Grid::new(10, 10);
 
-
-        grid.cells = grid.cells.iter().map(|row| {
-            row.iter().map(|cell| cell.alive()).collect()
-        }).collect();
+        grid.cells = grid
+            .cells
+            .iter()
+            .map(|row| row.iter().map(|cell| cell.alive()).collect())
+            .collect();
 
         assert_eq!(
             grid.display(),

@@ -1,7 +1,7 @@
 use std::{thread, time};
 
-mod grid;
 mod cell;
+mod grid;
 mod world;
 
 use grid::Grid;

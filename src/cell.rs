@@ -1,4 +1,4 @@
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Cell {
     x: u32,
     y: u32,
@@ -12,12 +12,18 @@ impl Cell {
 
     #[cfg(test)]
     pub fn dead(&self) -> Cell {
-        Cell { alive: false, ..*self}
+        Cell {
+            alive: false,
+            ..*self
+        }
     }
 
     #[cfg(test)]
     pub fn alive(&self) -> Cell {
-        Cell { alive: true, ..*self}
+        Cell {
+            alive: true,
+            ..*self
+        }
     }
 
     pub fn display(&self) -> String {
