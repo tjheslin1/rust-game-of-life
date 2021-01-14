@@ -11,9 +11,9 @@ impl Grid {
     pub fn new(width: u32, height: u32) -> Grid {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
-        for x in 0..height {
+        for y in 0..height {
             let mut row: Vec<Cell> = vec![];
-            for y in 0..width {
+            for x in 0..width {
                 row.push(Cell::new(x, y));
             }
             cells.push(row);

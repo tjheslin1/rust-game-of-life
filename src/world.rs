@@ -24,10 +24,56 @@ impl World {
 
         let mut neighbours: Vec<&Cell> = vec![];
 
-        if (cell.x > 0) & (cell.x < (width - 1) as u32) {
-        	let left = (cell.x - 1) as usize;
+        if (cell.x > 0) & (cell.y > 0) {
+            let left = (cell.x - 1) as usize;
+            let above = (cell.y - 1) as usize;
 
-        	neighbours.push(&self.grid.cells[cell.y as usize][left]);
+            neighbours.push(&self.grid.cells[above][left]);
+        }
+
+        if cell.x > 0 {
+            let left = (cell.x - 1) as usize;
+
+            neighbours.push(&self.grid.cells[cell.y as usize][left]);
+        }
+
+        if (cell.x > 0) & (cell.y < (height - 1) as u32) {
+            let left = (cell.x - 1) as usize;
+            let below = (cell.y + 1) as usize;
+
+            neighbours.push(&self.grid.cells[below][left]);
+        }
+
+        if cell.y > 0 {
+            let above = (cell.y - 1) as usize;
+
+            neighbours.push(&self.grid.cells[above][cell.x as usize]);
+        }
+
+        if cell.y < (height - 1) as u32 {
+            let below = (cell.y + 1) as usize;
+
+            neighbours.push(&self.grid.cells[below][cell.x as usize]);
+        }
+
+        if (cell.x < (width - 1) as u32) & (cell.y > 0) {
+            let right = (cell.x + 1) as usize;
+            let above = (cell.y - 1) as usize;
+
+            neighbours.push(&self.grid.cells[above][right]);
+        }
+
+        if cell.x < (width - 1) as u32 {
+            let right = (cell.x + 1) as usize;
+
+            neighbours.push(&self.grid.cells[cell.y as usize][right]);
+        }
+
+        if (cell.x < (width - 1) as u32) & (cell.y < (height - 1) as u32) {
+            let right = (cell.x + 1) as usize;
+            let below = (cell.y + 1) as usize;
+
+            neighbours.push(&self.grid.cells[below][right]);
         }
 
         neighbours
@@ -115,11 +161,11 @@ mod tests {
         let grid = Grid::new(4, 4);
         let world = World::new(grid);
 
-        let above_cell = &Cell::new(3, 2);
-        let left_cell = &Cell::new(2, 3);
         let above_left_cell = &Cell::new(2, 2);
+        let left_cell = &Cell::new(2, 3);
+        let above_cell = &Cell::new(3, 2);
 
-        let expected_neightbours = vec![above_cell, left_cell, above_left_cell];
+        let expected_neightbours = vec![above_left_cell, left_cell, above_cell];
 
         let actual_neighbours = world.neighbours(&world.grid.cells[3][3]);
 
