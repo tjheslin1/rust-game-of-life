@@ -2,7 +2,7 @@
 pub struct Cell {
     pub x: u32,
     pub y: u32,
-    alive: bool,
+    pub alive: bool,
 }
 
 impl Cell {
