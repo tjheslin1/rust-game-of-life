@@ -2,8 +2,8 @@ use crate::cell::Cell;
 use crate::grid::Grid;
 
 #[derive(Clone, Debug, PartialEq)]
-struct World {
-    grid: Grid,
+pub struct World {
+    pub grid: Grid,
 }
 
 impl World {
@@ -14,7 +14,7 @@ impl World {
     pub fn next(&self) -> World {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
-        
+
         let mut updated_cells: Vec<Vec<Cell>> = vec![];
 
         for y in 0..height {
