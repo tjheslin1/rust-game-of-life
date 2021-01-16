@@ -5,8 +5,9 @@ mod grid;
 mod world;
 
 use grid::Grid;
-use world:: World;
+use world::World;
 
+#[rustfmt::skip]
 fn main() {
     let mut world = World { grid: Grid::new_alive_grid(40, 40, 
 	    	vec![
@@ -32,7 +33,6 @@ fn main() {
         world = world.next();
     }
 }
-
 
 /*
 stuck:
