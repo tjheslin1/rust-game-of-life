@@ -181,14 +181,7 @@ mod tests {
 
     #[test]
     fn display_square_grid_with_one_alive_cell() {
-        
-        let grid = Grid::new_alive_grid(
-            10,
-            10,
-            vec![
-                (2, 3)
-            ],
-        );
+        let grid = Grid::new_alive_grid(10, 10, vec![(2, 3)]);
 
         assert_eq!(
             grid.display(),

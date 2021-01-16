@@ -12,30 +12,34 @@ impl World {
     }
 
     pub fn next(&self) -> World {
-        // let width = self.grid.cells[0].len();
-        // let height = self.grid.cells.len();
+        let width = self.grid.cells[0].len();
+        let height = self.grid.cells.len();
+        
+        let mut updated_cells: Vec<Vec<Cell>> = vec![];
 
-        // for each cell find its neigbours
-        // populate cell in new grid based on non-updated neighbours
-        // let mut updated_cells: Vec<Vec<Cell>> = vec![];
+        for y in 0..height {
+            let mut row: Vec<Cell> = vec![];
+            for x in 0..width {
+                let cell = &self.grid.cells[y][x];
+                let neighbours = self.neighbours(cell);
 
-        // for y in 0..height {
-        //     let mut row: Vec<Cell> = vec![];
-        //     for x in 0..width {
-        //     	let neighbours = self.neighbours(&self.grid.cells[y][x]);
+                if World::is_alive(cell, neighbours) {
+                    row.push(Cell::new(x as u32, y as u32).set_alive());
+                } else {
+                    row.push(Cell::new(x as u32, y as u32));
+                }
+            }
+            updated_cells.push(row);
+        }
 
-        //         // row.push(Cell::new(x, y));
-        //     }
-        //     updated_cells.push(row);
-        // }
-
-        // return Grid { cells: updated_cells };
-
-        // let grid = self.grid.clone();
-        self.clone()
+        World {
+            grid: Grid {
+                cells: updated_cells,
+            },
+        }
     }
 
-    pub fn is_alive(cell: &Cell, neighbours: &Vec<Cell>) -> bool {
+    pub fn is_alive(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
         if cell.alive {
@@ -121,9 +125,14 @@ impl World {
 mod tests {
     use super::*;
 
+    /*
+
+       .  ->  .
+
+    */
     #[test]
-    fn update_empty_world() {
-        let grid = Grid::new(0, 0);
+    fn update_tiny_world() {
+        let grid = Grid::new(1, 1);
         let world = World::new(grid);
 
         let updated_world = world.next();
@@ -140,13 +149,73 @@ mod tests {
 
     */
     #[test]
+    #[rustfmt::skip]
     fn update_world_one_dead_cell_to_set_alive() {
-        let grid = Grid::new(4, 4);
+        let grid = Grid::new_alive_grid(
+        	4, 
+        	4, 
+        	vec![
+        		(1, 1), (2, 1),
+        		(1, 2),
+
+        	],
+    	);
         let world = World::new(grid);
 
-        let updated_world = world.next();
+        let expected_grid = Grid::new_alive_grid(
+        	4, 
+        	4, 
+        	vec![
+        		(1, 1), (2, 1),
+        		(1, 2), (2, 2),
 
-        assert_eq!(world, updated_world);
+        	],
+    	);
+        let expected_world = World::new(expected_grid);
+
+        let actual_world = world.next();
+
+        assert_eq!(expected_world, actual_world);
+    }
+
+    /*
+
+       . * . .      * * * .
+       * * * .      * . . .
+       . * * .  ->  * . * .
+       . . . .      . . . .
+
+    */
+    #[test]
+    #[rustfmt::skip]
+    fn update_world_one_alive_cell_to_set_dead() {
+        let grid = Grid::new_alive_grid(
+        	4, 
+        	4, 
+        	vec![
+        		(1, 0),
+        		(0, 1), (1, 1), (2, 1),
+        		(1, 2), (2, 2),
+
+        	],
+    	);
+        let world = World::new(grid);
+
+        let expected_grid = Grid::new_alive_grid(
+        	4, 
+        	4, 
+        	vec![
+        		(0, 0), (1, 0), (2, 0),
+        		(0, 1),
+        		(0, 2), (2, 2),
+
+        	],
+    	);
+        let expected_world = World::new(expected_grid);
+
+        let actual_world = world.next();
+
+        assert_eq!(expected_world, actual_world);
     }
 
     /*
@@ -395,13 +464,13 @@ mod tests {
     fn alive_cell_no_longer_alive_for_all_dead_neighbours() {
         let alive_cell = Cell::new(0, 0).set_alive();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_dead(),
-            Cell::new(1, 0).set_dead(),
-            Cell::new(1, 1).set_dead(),
-        ];
+        let cell_one = &Cell::new(0, 1);
+        let cell_two = &Cell::new(1, 0);
+        let cell_three = &Cell::new(1, 1);
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -410,13 +479,13 @@ mod tests {
     fn alive_cell_no_longer_alive_for_one_alive_neighbour() {
         let alive_cell = Cell::new(0, 0).set_alive();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_dead(),
-            Cell::new(1, 1).set_dead(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0);
+        let cell_three = &Cell::new(1, 1);
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -425,14 +494,14 @@ mod tests {
     fn alive_cell_no_longer_alive_for_more_thhan_three_alive_neighbours() {
         let alive_cell = Cell::new(0, 0).set_alive();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_alive(),
-            Cell::new(1, 2).set_alive(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1).set_alive();
+        let cell_four = &Cell::new(1, 2).set_alive();
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three, cell_four];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -441,13 +510,13 @@ mod tests {
     fn alive_cell_stays_alive_for_two_alive_neighbours() {
         let alive_cell = Cell::new(0, 0).set_alive();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_dead(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1);
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
@@ -456,28 +525,28 @@ mod tests {
     fn alive_cell_stays_alive_for_three_alive_neighbours() {
         let alive_cell = Cell::new(0, 0).set_alive();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_alive(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1).set_alive();
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
 
     #[test]
     fn dead_cell_becomes_alive_for_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).set_dead();
+        let alive_cell = Cell::new(0, 0);
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_alive(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1).set_alive();
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
@@ -486,13 +555,13 @@ mod tests {
     fn dead_cell_stays_dead_for_fewer_than_three_alive_neighbours() {
         let alive_cell = Cell::new(0, 0).set_dead();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_dead(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1);
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -501,14 +570,14 @@ mod tests {
     fn dead_cell_stays_dead_for_more_than_three_alive_neighbours() {
         let alive_cell = Cell::new(0, 0).set_dead();
 
-        let neighbours = vec![
-            Cell::new(0, 1).set_alive(),
-            Cell::new(1, 0).set_alive(),
-            Cell::new(1, 1).set_alive(),
-            Cell::new(1, 2).set_alive(),
-        ];
+        let cell_one = &Cell::new(0, 1).set_alive();
+        let cell_two = &Cell::new(1, 0).set_alive();
+        let cell_three = &Cell::new(1, 1).set_alive();
+        let cell_four = &Cell::new(1, 2).set_alive();
 
-        let is_alive = World::is_alive(&alive_cell, &neighbours);
+        let neighbours = vec![cell_one, cell_two, cell_three, cell_four];
+
+        let is_alive = World::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
