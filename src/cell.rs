@@ -10,16 +10,14 @@ impl Cell {
         Cell { x, y, alive: false }
     }
 
-    #[cfg(test)]
-    pub fn dead(&self) -> Cell {
+    pub fn set_dead(&self) -> Cell {
         Cell {
             alive: false,
             ..*self
         }
     }
 
-    #[cfg(test)]
-    pub fn alive(&self) -> Cell {
+    pub fn set_alive(&self) -> Cell {
         Cell {
             alive: true,
             ..*self

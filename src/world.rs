@@ -133,6 +133,24 @@ mod tests {
 
     /*
 
+       . . . .      . . . .
+       . * * .      . * * .
+       . * . .  ->  . * * .
+       . . . .      . . . .
+
+    */
+    #[test]
+    fn update_world_one_dead_cell_to_set_alive() {
+        let grid = Grid::new(4, 4);
+        let world = World::new(grid);
+
+        let updated_world = world.next();
+
+        assert_eq!(world, updated_world);
+    }
+
+    /*
+
        * *
        * *
 
@@ -375,12 +393,12 @@ mod tests {
 
     #[test]
     fn alive_cell_no_longer_alive_for_all_dead_neighbours() {
-        let alive_cell = Cell::new(0, 0).alive();
+        let alive_cell = Cell::new(0, 0).set_alive();
 
         let neighbours = vec![
-            Cell::new(0, 1).dead(),
-            Cell::new(1, 0).dead(),
-            Cell::new(1, 1).dead(),
+            Cell::new(0, 1).set_dead(),
+            Cell::new(1, 0).set_dead(),
+            Cell::new(1, 1).set_dead(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -390,12 +408,12 @@ mod tests {
 
     #[test]
     fn alive_cell_no_longer_alive_for_one_alive_neighbour() {
-        let alive_cell = Cell::new(0, 0).alive();
+        let alive_cell = Cell::new(0, 0).set_alive();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).dead(),
-            Cell::new(1, 1).dead(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_dead(),
+            Cell::new(1, 1).set_dead(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -405,13 +423,13 @@ mod tests {
 
     #[test]
     fn alive_cell_no_longer_alive_for_more_thhan_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).alive();
+        let alive_cell = Cell::new(0, 0).set_alive();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).alive(),
-            Cell::new(1, 2).alive(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_alive(),
+            Cell::new(1, 2).set_alive(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -421,12 +439,12 @@ mod tests {
 
     #[test]
     fn alive_cell_stays_alive_for_two_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).alive();
+        let alive_cell = Cell::new(0, 0).set_alive();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).dead(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_dead(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -436,12 +454,12 @@ mod tests {
 
     #[test]
     fn alive_cell_stays_alive_for_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).alive();
+        let alive_cell = Cell::new(0, 0).set_alive();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).alive(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_alive(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -451,12 +469,12 @@ mod tests {
 
     #[test]
     fn dead_cell_becomes_alive_for_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).dead();
+        let alive_cell = Cell::new(0, 0).set_dead();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).alive(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_alive(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -466,12 +484,12 @@ mod tests {
 
     #[test]
     fn dead_cell_stays_dead_for_fewer_than_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).dead();
+        let alive_cell = Cell::new(0, 0).set_dead();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).dead(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_dead(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
@@ -481,13 +499,13 @@ mod tests {
 
     #[test]
     fn dead_cell_stays_dead_for_more_than_three_alive_neighbours() {
-        let alive_cell = Cell::new(0, 0).dead();
+        let alive_cell = Cell::new(0, 0).set_dead();
 
         let neighbours = vec![
-            Cell::new(0, 1).alive(),
-            Cell::new(1, 0).alive(),
-            Cell::new(1, 1).alive(),
-            Cell::new(1, 2).alive(),
+            Cell::new(0, 1).set_alive(),
+            Cell::new(1, 0).set_alive(),
+            Cell::new(1, 1).set_alive(),
+            Cell::new(1, 2).set_alive(),
         ];
 
         let is_alive = World::is_alive(&alive_cell, &neighbours);
