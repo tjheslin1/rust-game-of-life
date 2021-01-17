@@ -142,6 +142,45 @@ mod tests {
 
     /*
 
+       . . . . .      . . . . .
+       . . * * .      . . * * .
+       . * . * .  ->  . * . * .
+       . . * . .      . . * . .
+       . . . . .      . . . . .
+
+    */
+    #[test]
+    #[rustfmt::skip]
+    fn stuck() {
+        let grid = Grid::new_alive_grid(
+        	5, 
+        	5, 
+        	vec![
+        		(2, 1), (3, 1),
+        		(1, 2),  (3, 2),
+        		(2, 3),
+        	],
+    	);
+        let world = World::new(grid);
+
+        let expected_grid = Grid::new_alive_grid(
+        	5, 
+        	5, 
+        	vec![
+        		(2, 1), (3, 1),
+        		(1, 2),  (3, 2),
+        		(2, 3),
+        	],
+    	);
+        let expected_world = World::new(expected_grid);
+
+        let actual_world = world.next();
+
+        assert_eq!(expected_world, actual_world);
+    }
+
+    /*
+
        . . . .      . . . .
        . * * .      . * * .
        . * . .  ->  . * * .
@@ -157,7 +196,6 @@ mod tests {
         	vec![
         		(1, 1), (2, 1),
         		(1, 2),
-
         	],
     	);
         let world = World::new(grid);
@@ -168,7 +206,6 @@ mod tests {
         	vec![
         		(1, 1), (2, 1),
         		(1, 2), (2, 2),
-
         	],
     	);
         let expected_world = World::new(expected_grid);
@@ -196,7 +233,6 @@ mod tests {
         		(1, 0),
         		(0, 1), (1, 1), (2, 1),
         		(1, 2), (2, 2),
-
         	],
     	);
         let world = World::new(grid);
@@ -208,7 +244,6 @@ mod tests {
         		(0, 0), (1, 0), (2, 0),
         		(0, 1),
         		(0, 2), (2, 2),
-
         	],
     	);
         let expected_world = World::new(expected_grid);
