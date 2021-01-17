@@ -26,9 +26,9 @@ impl Cell {
 
     pub fn display(&self) -> String {
         if self.alive {
-            String::from("*")
+            String::from("#")
         } else {
-            String::from(".")
+            String::from("-")
         }
     }
 }
