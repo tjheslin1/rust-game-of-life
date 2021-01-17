@@ -151,7 +151,7 @@ mod tests {
     */
     #[test]
     #[rustfmt::skip]
-    fn stuck() {
+    fn update_static_world() {
         let grid = Grid::new_alive_grid(
         	5, 
         	5, 
