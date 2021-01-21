@@ -32,7 +32,7 @@ fn main() {
 
     let config = Config::new(env::args(), default_config)
     	.unwrap_or_else(|err| {
-    		eprintln!("Problem parsing arguments: {}", err);
+    		eprintln!("{}", err);
         	process::exit(1);
     });
 

@@ -8,36 +8,36 @@ pub struct Config {
 }
 
 impl Config {
+
     pub fn new(args: env::Args, default_config: Config) -> Result<Config, String> {
-        let argss = args.collect::<Vec<String>>();
+        match args.collect::<Vec<String>>().as_slice() {
+            [_] => 
+                Ok(default_config),
+            [_, w, h, n, s] => {
+                let (width, height, num_starting_cells, seed) = 
+                    Config::parse_args(w, h, n, s)?;
 
-        let result: Result<(u32, u32, u32, u32), String> = match argss.as_slice() {
-            [w, h, n, s] =>
-                parse(w, h, n, s),
-            [args] => 
-                Err(format!("Expected 4 args but got {}", args.len())),
-            [] => 
-                Err("Didn't get a query string".to_owned()),
-            _ =>
-                Err("Unknown error :(".to_owned()),
-        };
+                Ok(Config {
+                    width,
+                    height,
+                    num_starting_cells,
+                    seed,
+                })
+            }
+            args => {
+                println!("{:?}", args[0]);
 
-        let (width, height, num_starting_cells, seed) = result?;
-
-        Ok(Config {
-            width,
-            height,
-            num_starting_cells,
-            seed,
-        })
+                Err(format!("Expected 4 args but got {}", args.len()))
+            }
+        }
     }
 
-    fn parse(w: String, h: String, n: String, s: String) -> Result<[u32; 4], String> {
-        let width: u32 = w.parse()?;
-        let height: u32 = w.parse()?;
-        let num_starting_cells: u32 = w.parse()?;
-        let seed: u32 = w.parse()?;
-
-        Ok([width, height, num_starting_cells, seed])
+    fn parse_args(w: &String, h: &String, n: &String, s: &String) -> Result<(u32, u32, u32, u32), String> {
+        match (w.parse(), h.parse(), n.parse(), s.parse()) {
+            (Ok(wu), Ok(hu), Ok(nu), Ok(su)) =>
+                Ok((wu, hu, nu, su)),
+            _ => 
+                Err("Unable to parse parameters, please try again.".to_owned()),
+        }
     }
 }
