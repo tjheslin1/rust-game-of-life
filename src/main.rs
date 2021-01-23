@@ -1,12 +1,12 @@
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use std::cmp;
 use std::env;
 use std::process;
 use std::{thread, time};
-use rand::{Rng,SeedableRng};
-use rand::rngs::StdRng;
 
-mod config;
 mod cell;
+mod config;
 mod grid;
 mod world;
 
@@ -15,10 +15,10 @@ use grid::Grid;
 use world::World;
 
 /*
-	memorable seeds:
-	- 43 (starting cells = 40)
-	- 4045 (starting cells = 40)
-	- 3658 (starting cells = 40)
+    memorable seeds:
+    - 43 (starting cells = 40)
+    - 4045 (starting cells = 40)
+    - 3658 (starting cells = 40)
 */
 #[rustfmt::skip]
 fn main() {
@@ -70,10 +70,8 @@ fn main() {
     }
 }
 
-
-
 // glider
-// let mut world = World { grid: Grid::new_alive_grid(40, 40, 
+// let mut world = World { grid: Grid::new_alive_grid(40, 40,
 //     	vec![
 //     		(2, 3), (4, 3),
 //     		(3, 4), (4, 4),
@@ -83,13 +81,13 @@ fn main() {
 // };
 
 // gosper glider gun
-// let mut world = World { grid: Grid::new_alive_grid(40, 40, 
+// let mut world = World { grid: Grid::new_alive_grid(40, 40,
 //     	vec![
 //     		(25, 1),
 //     		(23, 2), (25, 2),
 //     		(13, 3), (14, 3), (21, 3), (22, 3), (35, 3), (36, 3),
 //     		(12, 4), (16, 4), (21, 4), (22, 4), (35, 4), (36, 3),
-//     		(1, 5), (2, 5), (11, 5), (17, 5), (21, 5), (22, 5), 
+//     		(1, 5), (2, 5), (11, 5), (17, 5), (21, 5), (22, 5),
 //     		(1, 6), (2, 6), (11, 6), (15, 6), (17, 6), (18, 6), (23, 6), (25, 6),
 //     		(11, 7), (17, 7), (25, 7),
 //     		(12, 8), (16, 8),

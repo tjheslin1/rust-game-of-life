@@ -47,7 +47,7 @@ impl Grid {
             .map(|row| {
                 row.iter()
                     .map(|cell| cell.display())
-                    .intersperse(" ".to_string())
+                    .intersperse(" ")
                     .collect::<String>()
             })
             .intersperse("\n".to_string())

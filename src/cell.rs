@@ -2,25 +2,38 @@
 pub struct Cell {
     pub x: u32,
     pub y: u32,
-    alive_character: String,
-    dead_character: String,
+    alive_character: &'static str,
+    dead_character: &'static str,
     pub alive: bool,
 }
 
 impl Cell {
     pub fn new(x: u32, y: u32) -> Cell {
-        Cell { x, y, 
-            alive_character: String::from("*"), 
-            dead_character: String::from("."), 
-            alive: false }
+        Cell {
+            x,
+            y,
+            alive_character: "*",
+            dead_character: ".",
+            alive: false,
+        }
     }
 
-
-    pub fn new_with_characters(x: u32, y: u32, alive_character: String, dead_character: String) -> Cell {
-        Cell { x, y, alive_character, dead_character, alive: false }
+    pub fn new_with_characters(
+        x: u32,
+        y: u32,
+        alive_character: &'static str,
+        dead_character: &'static str,
+    ) -> Cell {
+        Cell {
+            x,
+            y,
+            alive_character,
+            dead_character,
+            alive: false,
+        }
     }
 
-    pub fn set_dead(&self) -> Cell { 
+    pub fn set_dead(&self) -> Cell {
         Cell {
             alive: false,
             ..*self
@@ -34,7 +47,7 @@ impl Cell {
         }
     }
 
-    pub fn display(&self) -> String {
+    pub fn display(&self) -> &str {
         if self.alive {
             self.alive_character
         } else {

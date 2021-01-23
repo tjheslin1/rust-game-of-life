@@ -7,7 +7,6 @@ pub struct World {
 }
 
 impl World {
-
     pub fn next(&self) -> World {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
