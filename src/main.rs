@@ -11,6 +11,7 @@ mod grid;
 mod world;
 
 use config::Config;
+use config::Config::{Preset, WorldDef};
 use grid::Grid;
 use world::World;
 
@@ -22,39 +23,60 @@ use world::World;
 */
 #[rustfmt::skip]
 fn main() {
-	let default_config = Config {
+	let default_world_def = WorldDef {
     	width: 40,
     	height: 40,
     	num_starting_cells: 40,
     	seed: rand::thread_rng().gen_range(1, 10000)
     };
 
+    let presets = vec!["gosper"];
 
-    let config = Config::new(env::args(), default_config)
+    /*
+    let timber_resources: HashMap<&str, i32> = [("Norway", 100), ("Denmark", 50), ("Iceland", 10)]
+    .iter()
+    .cloned()
+    .collect();
+    */
+
+
+    let config = Config::new(env::args(), default_world_def, presets)
     	.unwrap_or_else(|err| {
     		eprintln!("{}", err);
         	process::exit(1);
     });
 
-	println!("seed = {}", config.seed);
-	let mut rng = StdRng::seed_from_u64(config.seed.into());
+	let mut world = World { grid: Grid::new(1, 1) };
 
-    let mut live_cells: Vec<(u32, u32)> = vec![];
-    for _ in 1..config.num_starting_cells {
-    	live_cells.push(
-    		(
-				rng.gen_range(cmp::max(0, (config.width/2)-10), cmp::min(config.width, (config.width/2)+10)),
-    			rng.gen_range(cmp::max(0, (config.height/2)-10), cmp::min(config.height, (config.height/2)+10))
-			)
-		);
-    }
+	match config {
+		Preset { key } => {
+			println!("seed = {}", key);
+			// presets
+			world = World { grid: Grid::new(1, 1) }
+		},
+		WorldDef { width, height, num_starting_cells, seed } => {
+			println!("seed = {}", seed);
 
-    let mut world = World { grid: Grid::new_alive_grid(
-    	config.width, 
-    	config.height, 
-    	live_cells,
-		)
-	};
+			let mut rng = StdRng::seed_from_u64(seed.into());
+
+		    let mut live_cells: Vec<(u32, u32)> = vec![];
+		    for _ in 1..num_starting_cells {
+		    	live_cells.push(
+		    		(
+						rng.gen_range(cmp::max(0, (width/2)-10), cmp::min(width, (width/2)+10)),
+		    			rng.gen_range(cmp::max(0, (height/2)-10), cmp::min(height, (height/2)+10))
+					)
+				);
+		    }
+
+		    world = World { grid: Grid::new_alive_grid(
+		    	width, 
+		    	height, 
+		    	live_cells,
+				)
+			};
+		},
+	}
 
     let five_hundred_millis = time::Duration::from_millis(250);
 

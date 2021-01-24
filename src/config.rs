@@ -1,40 +1,36 @@
 use std::env;
 
-pub struct Config {
-    pub worldDef: Option<WorldDef>,
-    pub preset: Option<&<'static> str>
-}
-
-pub struct WorldDef {
-    pub width: u32,
-    pub height: u32,
-    pub num_starting_cells: u32,
-    pub seed: u32,
+pub enum Config {
+    Preset { key: &'static str },
+    WorldDef {
+        pub width: u32,
+        pub height: u32,
+        pub num_starting_cells: u32,
+        pub seed: u32,
+    }
 }
 
 impl Config {
-    pub fn new(args: env::Args, default_config: Config, presets: Vec<&str>) -> Result<Either<Config>, String> {
+    pub fn new(args: env::Args, default_world_def: WorldDef, presets: Vec<&str>) -> Result<Config, String> {
         match args.collect::<Vec<String>>().as_slice() {
             [_, preset] => {
                 if presets.contains(preset) {
-                    Ok(Config { worldDef: None, preset: Some(preset) }),
+                    Ok(Preset { key: preset })
                 } else {
                     Err(format!("Unknown preset, choose from {}.", presets))
                 }
             }
-            [_] => Ok(default_config),
+            [_] => Ok(default_world_def),
             [_, w, h, n, s] => {
                 let (width, height, num_starting_cells, seed) = Config::parse_args(w, h, n, s)?;
 
-                Ok(Config {
-                    WorldDef {
+                Ok(WorldDef {
                     width,
                     height,
                     num_starting_cells,
                     seed,
-                    },
-                    preset: None,
-                })
+                    }
+                )
             }
             args => {
                 println!("{:?}", args[0]);
