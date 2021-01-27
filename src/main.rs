@@ -11,7 +11,6 @@ mod grid;
 mod world;
 
 use config::Config;
-use config::Config::{Preset, WorldDef};
 use grid::Grid;
 use world::World;
 
@@ -23,7 +22,7 @@ use world::World;
 */
 #[rustfmt::skip]
 fn main() {
-	let default_world_def = WorldDef {
+	let default_world_def = Config::WorldDef {
     	width: 40,
     	height: 40,
     	num_starting_cells: 40,
@@ -49,12 +48,13 @@ fn main() {
 	let mut world = World { grid: Grid::new(1, 1) };
 
 	match config {
-		Preset { key } => {
-			println!("seed = {}", key);
+		Config::Preset { key } => {
+			println!("preset = {}", key);
+
 			// presets
 			world = World { grid: Grid::new(1, 1) }
 		},
-		WorldDef { width, height, num_starting_cells, seed } => {
+		Config::WorldDef { width, height, num_starting_cells, seed } => {
 			println!("seed = {}", seed);
 
 			let mut rng = StdRng::seed_from_u64(seed.into());
@@ -82,7 +82,13 @@ fn main() {
 
     print!("\x1B[2J\x1B[1;1H");
     for i in 1..1000 {
-        println!("{}: seed = {}", i, config.seed);
+    	match config {
+    		Config::Preset { key } =>
+    			println!("{}: key = {}", i, key),
+			Config::WorldDef { seed, .. } =>
+				println!("{}: seed = {}", i, seed),
+    	}
+        
         print!("{}", world.grid.display());
 
         thread::sleep(five_hundred_millis);

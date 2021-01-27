@@ -3,28 +3,30 @@ use std::env;
 pub enum Config {
     Preset { key: &'static str },
     WorldDef {
-        pub width: u32,
-        pub height: u32,
-        pub num_starting_cells: u32,
-        pub seed: u32,
+        width: u32,
+        height: u32,
+        num_starting_cells: u32,
+        seed: u32,
     }
 }
 
 impl Config {
-    pub fn new(args: env::Args, default_world_def: WorldDef, presets: Vec<&str>) -> Result<Config, String> {
-        match args.collect::<Vec<String>>().as_slice() {
+    pub fn new(args: env::Args, default_world_def: Config, presets: Vec<&'static str>) -> Result<Config, String> {
+        let arg_strs = args.collect::<Vec<String>>();
+
+        match arg_strs[..] {
             [_, preset] => {
-                if presets.contains(preset) {
-                    Ok(Preset { key: preset })
+                if presets.contains(&&preset[..]) {
+                    Ok(Config::Preset { key: &preset[..] })
                 } else {
-                    Err(format!("Unknown preset, choose from {}.", presets))
+                    Err(format!("Unknown preset, choose from {:?}.", presets))
                 }
             }
             [_] => Ok(default_world_def),
             [_, w, h, n, s] => {
                 let (width, height, num_starting_cells, seed) = Config::parse_args(w, h, n, s)?;
 
-                Ok(WorldDef {
+                Ok(Config::WorldDef {
                     width,
                     height,
                     num_starting_cells,
