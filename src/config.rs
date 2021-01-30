@@ -14,7 +14,7 @@ impl Config {
     pub fn new(args: env::Args, default_world_def: Config, presets: Vec<&'static str>) -> Result<Config, String> {
         let arg_strs = args.collect::<Vec<String>>();
 
-        match arg_strs[..] {
+        let result = match arg_strs.as_slice() {
             [_, preset] => {
                 if presets.contains(&&preset[..]) {
                     Ok(Config::Preset { key: &preset[..] })
@@ -24,7 +24,7 @@ impl Config {
             }
             [_] => Ok(default_world_def),
             [_, w, h, n, s] => {
-                let (width, height, num_starting_cells, seed) = Config::parse_args(w, h, n, s)?;
+                let (width, height, num_starting_cells, seed) = Config::parse_args(&w, &h, &n, &s)?;
 
                 Ok(Config::WorldDef {
                     width,
@@ -34,12 +34,16 @@ impl Config {
                     }
                 )
             }
-            args => {
-                println!("{:?}", args[0]);
+            [args] => {
+                println!("{:?}", args);
 
                 Err(format!("Expected 4 args but got {}", args.len() - 1))
             }
-        }
+            _ =>
+                Err(String::from("Unexpected input."))
+        };
+
+        result
     }
 
     fn parse_args(
