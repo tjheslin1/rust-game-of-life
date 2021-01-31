@@ -31,14 +31,6 @@ fn main() {
 
     let presets = vec!["gosper"];
 
-    /*
-    let timber_resources: HashMap<&str, i32> = [("Norway", 100), ("Denmark", 50), ("Iceland", 10)]
-    .iter()
-    .cloned()
-    .collect();
-    */
-
-
     let config = Config::new(env::args(), default_world_def, presets)
     	.unwrap_or_else(|err| {
     		eprintln!("{}", err);
@@ -60,11 +52,15 @@ fn main() {
 			let mut rng = StdRng::seed_from_u64(seed.into());
 
 		    let mut live_cells: Vec<(u32, u32)> = vec![];
+
+		    let width_offset = cmp::max(1, width/8);
+		    let height_offset = cmp::max(1, height/8);
+
 		    for _ in 1..num_starting_cells {
 		    	live_cells.push(
 		    		(
-						rng.gen_range(cmp::max(0, (width/2)-(width/5)), cmp::min(width, (width/2)+(width/5))),
-		    			rng.gen_range(cmp::max(0, (height/2)-(height/5)), cmp::min(height, (height/2)+(height/5)))
+						rng.gen_range(cmp::max(0, (width/2) - width_offset), cmp::min(width, (width/2) + width_offset)),
+		    			rng.gen_range(cmp::max(0, (height/2) - height_offset), cmp::min(height, (height/2) + height_offset))
 					)
 				);
 		    }
