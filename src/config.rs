@@ -1,7 +1,7 @@
 use std::env;
 
 pub enum Config {
-    Preset { key: &'static str },
+    Preset { key: String },
     WorldDef {
         width: u32,
         height: u32,
@@ -11,13 +11,13 @@ pub enum Config {
 }
 
 impl Config {
-    pub fn new(args: env::Args, default_world_def: Config, presets: Vec<&'static str>) -> Result<Config, String> {
+    pub fn new(args: env::Args, default_world_def: Config, presets: Vec<&str>) -> Result<Config, String> {
         let arg_strs = args.collect::<Vec<String>>();
 
         let result = match arg_strs.as_slice() {
             [_, preset] => {
                 if presets.contains(&&preset[..]) {
-                    Ok(Config::Preset { key: &preset[..] })
+                    Ok(Config::Preset { key: preset.to_string() })
                 } else {
                     Err(format!("Unknown preset, choose from {:?}.", presets))
                 }
@@ -34,13 +34,8 @@ impl Config {
                     }
                 )
             }
-            [args] => {
-                println!("{:?}", args);
-
+            args =>
                 Err(format!("Expected 4 args but got {}", args.len() - 1))
-            }
-            _ =>
-                Err(String::from("Unexpected input."))
         };
 
         result

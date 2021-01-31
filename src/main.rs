@@ -48,7 +48,7 @@ fn main() {
 	let mut world = World { grid: Grid::new(1, 1) };
 
 	match config {
-		Config::Preset { key } => {
+		Config::Preset { ref key } => {
 			println!("preset = {}", key);
 
 			// presets
@@ -63,8 +63,8 @@ fn main() {
 		    for _ in 1..num_starting_cells {
 		    	live_cells.push(
 		    		(
-						rng.gen_range(cmp::max(0, (width/2)-10), cmp::min(width, (width/2)+10)),
-		    			rng.gen_range(cmp::max(0, (height/2)-10), cmp::min(height, (height/2)+10))
+						rng.gen_range(cmp::max(0, (width/2)-(width/5)), cmp::min(width, (width/2)+(width/5))),
+		    			rng.gen_range(cmp::max(0, (height/2)-(height/5)), cmp::min(height, (height/2)+(height/5)))
 					)
 				);
 		    }
@@ -83,7 +83,7 @@ fn main() {
     print!("\x1B[2J\x1B[1;1H");
     for i in 1..1000 {
     	match config {
-    		Config::Preset { key } =>
+    		Config::Preset { ref key } =>
     			println!("{}: key = {}", i, key),
 			Config::WorldDef { seed, .. } =>
 				println!("{}: seed = {}", i, seed),
