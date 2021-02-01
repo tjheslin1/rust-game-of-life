@@ -9,6 +9,7 @@ mod cell;
 mod config;
 mod grid;
 mod world;
+mod example_worlds;
 
 use config::Config;
 use grid::Grid;
@@ -44,7 +45,14 @@ fn main() {
 			println!("preset = {}", key);
 
 			// presets
-			world = World { grid: Grid::new(1, 1) }
+			world = match example_worlds::find(key) {
+				Some(world) => 
+					world,
+				_ => {
+					eprintln!("Didn't find a match for preset: {}", key);
+					process::exit(1)
+				}
+			}
 		},
 		Config::WorldDef { width, height, num_starting_cells, seed } => {
 			println!("seed = {}", seed);
