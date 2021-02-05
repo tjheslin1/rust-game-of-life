@@ -90,7 +90,8 @@ fn main() {
     		Config::Preset { ref key } =>
     			println!("{}: key = {}", i, key),
 			Config::WorldDef { seed, .. } =>
-				println!("{}: seed = {}", i, seed),
+				println!("for help: cargo run help
+{}: seed = {}", i, seed),
     	}
         
         print!("{}", world.grid.display());

@@ -1,12 +1,6 @@
 use crate::grid::Grid;
 use crate::world::World;
 
-// pub struct ExampleWorld {
-// 	name: String,
-// 	world: World,
-// }
-
-// impl ExampleWorld {
 pub fn find(key: &String) -> Option<World> {
 	match &key[..] {
 		"gosper" => 

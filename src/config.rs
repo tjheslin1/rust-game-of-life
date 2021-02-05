@@ -16,7 +16,13 @@ impl Config {
 
         let result = match arg_strs.as_slice() {
             [_, preset] => {
-                if presets.contains(&&preset[..]) {
+                if preset == "help" {
+                    Err(format!("try: cargo run
+try: cargo run {:?}
+try: cargo run [width height num_starting_cells seed] (e.g: cargo run 40 40 40 4045)", 
+                    presets))//.iter().intersperse(",").collect::<String>()))
+                }
+                else if presets.contains(&&preset[..]) {
                     Ok(Config::Preset { key: preset.to_string() })
                 } else {
                     Err(format!("Unknown preset, choose from {:?}.", presets))
