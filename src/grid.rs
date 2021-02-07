@@ -3,12 +3,12 @@ use itertools::Itertools;
 use crate::cell::Cell;
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Grid {
-    pub cells: Vec<Vec<Cell>>,
+pub struct Grid<'a> {
+    pub cells: Vec<Vec<Cell<'a>>>,
 }
 
-impl Grid {
-    pub fn new(width: u32, height: u32) -> Grid {
+impl Grid<'_> {
+    pub fn new(width: u32, height: u32) -> Grid<'static> {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
         for y in 0..height {
@@ -22,16 +22,30 @@ impl Grid {
         Grid { cells }
     }
 
-    pub fn new_alive_grid(width: u32, height: u32, alive_cells: Vec<(u32, u32)>) -> Grid {
+    pub fn new_alive_grid<'a>(
+        width: u32,
+        height: u32,
+        dead_char: Option<&'a str>,
+        alive_char: Option<&'a str>,
+        alive_cells: Vec<(u32, u32)>,
+    ) -> Grid<'a> {
         let mut cells: Vec<Vec<Cell>> = vec![];
+
+        let (dead_character, alive_character) = match (dead_char, alive_char) {
+            (Some(d), Some(a)) => (d, a),
+            _ => (".", "*"),
+        };
 
         for y in 0..height {
             let mut row: Vec<Cell> = vec![];
             for x in 0..width {
+                let cell = Cell::new_with_characters(x, y, dead_character, alive_character);
+                let alive_cell = cell.set_alive();
+
                 if alive_cells.contains(&(x, y)) {
-                    row.push(Cell::new(x, y).set_alive());
+                    row.push(alive_cell);
                 } else {
-                    row.push(Cell::new(x, y));
+                    row.push(cell);
                 }
             }
             cells.push(row);
@@ -107,6 +121,8 @@ mod tests {
         let grid = Grid::new_alive_grid(
             10,
             1,
+            None,
+            None,
             vec![
                 (0, 0),
                 (1, 0),
@@ -122,6 +138,30 @@ mod tests {
         );
 
         assert_eq!(grid.display(), "* * * * * * * * * *");
+    }
+
+    #[test]
+    fn display_one_row_grid_of_alive_cells_with_custom_characters() {
+        let grid = Grid::new_alive_grid(
+            10,
+            1,
+            Some("_"),
+            Some("#"),
+            vec![
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (3, 0),
+                (4, 0),
+                (5, 0),
+                (6, 0),
+                (7, 0),
+                (8, 0),
+                (9, 0),
+            ],
+        );
+
+        assert_eq!(grid.display(), "# # # # # # # # # #");
     }
 
     #[test]
@@ -148,8 +188,8 @@ mod tests {
     fn display_square_grid_of_alive_cells() {
         
         let grid = Grid::new_alive_grid(
-            10,
-            10,
+            10, 10,
+            None, None,
             vec![
                 (0, 0),(0, 1),(0, 2),(0, 3),(0, 4),(0, 5),(0, 6),(0, 7),(0, 8),(0, 9),
                 (1, 0),(1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 7),(1, 8),(1, 9),
@@ -181,7 +221,7 @@ mod tests {
 
     #[test]
     fn display_square_grid_with_one_alive_cell() {
-        let grid = Grid::new_alive_grid(10, 10, vec![(2, 3)]);
+        let grid = Grid::new_alive_grid(10, 10, None, None, vec![(2, 3)]);
 
         assert_eq!(
             grid.display(),

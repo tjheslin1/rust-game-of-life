@@ -1,29 +1,40 @@
 use std::env;
 
 pub enum Config {
-    Preset { key: String },
+    Preset {
+        key: String,
+    },
     WorldDef {
         width: u32,
         height: u32,
         num_starting_cells: u32,
         seed: u32,
-    }
+        dead_char: Option<&str>,
+        alive_char: Option<&str>,
+    },
 }
 
 impl Config {
-    pub fn new(args: env::Args, default_world_def: Config, presets: Vec<&str>) -> Result<Config, String> {
+    pub fn new(
+        args: env::Args,
+        default_world_def: Config,
+        presets: Vec<&str>,
+    ) -> Result<Config, String> {
         let arg_strs = args.collect::<Vec<String>>();
 
         let result = match arg_strs.as_slice() {
             [_, preset] => {
                 if preset == "help" {
-                    Err(format!("try: gol
+                    Err(format!(
+                        "try: gol
 try: gol {:?}
-try: gol [width height num_starting_cells seed] (e.g: gol 40 40 40 4045)", 
-                    presets))
-                }
-                else if presets.contains(&&preset[..]) {
-                    Ok(Config::Preset { key: preset.to_string() })
+try: gol [width height num_starting_cells seed dead_cell live_cell] (e.g: gol 40 40 40 4045)",
+                        presets
+                    ))
+                } else if presets.contains(&&preset[..]) {
+                    Ok(Config::Preset {
+                        key: preset.to_string(),
+                    })
                 } else {
                     Err(format!("Unknown preset, choose from {:?}.", presets))
                 }
@@ -37,11 +48,27 @@ try: gol [width height num_starting_cells seed] (e.g: gol 40 40 40 4045)",
                     height,
                     num_starting_cells,
                     seed,
-                    }
-                )
+                    None,
+                    None,
+                })
             }
-            args =>
-                Err(format!("Expected 4 args but got {}", args.len() - 1))
+            [_, w, h, n, s, d, a] => {
+                let (width, height, num_starting_cells, seed, dead_char, alive_char) =
+                    Config::parse_args(&w, &h, &n, &s, &d, &a)?;
+
+                Ok(Config::WorldDef {
+                    width,
+                    height,
+                    num_starting_cells,
+                    seed,
+                    dead_char,
+                    alive_char,
+                })
+            }
+            args => Err(format!(
+                "Expected at least 4 args but got {}",
+                args.len() - 1
+            )),
         };
 
         result

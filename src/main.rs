@@ -7,9 +7,9 @@ use std::{thread, time};
 
 mod cell;
 mod config;
+mod example_worlds;
 mod grid;
 mod world;
-mod example_worlds;
 
 use config::Config;
 use grid::Grid;
@@ -54,7 +54,7 @@ fn main() {
 				}
 			}
 		},
-		Config::WorldDef { width, height, num_starting_cells, seed } => {
+		Config::WorldDef { width, height, num_starting_cells, seed, dead_char, alive_char } => {
 			println!("seed = {}", seed);
 
 			let mut rng = StdRng::seed_from_u64(seed.into());

@@ -1,14 +1,14 @@
 #[derive(Clone, Debug, PartialEq)]
-pub struct Cell {
+pub struct Cell<'a> {
     pub x: u32,
     pub y: u32,
-    alive_character: &'static str,
-    dead_character: &'static str,
+    alive_character: &'a str,
+    dead_character: &'a str,
     pub alive: bool,
 }
 
-impl Cell {
-    pub fn new(x: u32, y: u32) -> Cell {
+impl Cell<'_> {
+    pub fn new(x: u32, y: u32) -> Cell<'static> {
         Cell {
             x,
             y,
@@ -18,12 +18,12 @@ impl Cell {
         }
     }
 
-    pub fn new_with_characters(
+    pub fn new_with_characters<'a>(
         x: u32,
         y: u32,
-        alive_character: &'static str,
-        dead_character: &'static str,
-    ) -> Cell {
+        alive_character: &'a str,
+        dead_character: &'a str,
+    ) -> Cell<'a> {
         Cell {
             x,
             y,
@@ -69,8 +69,9 @@ mod tests {
 
     #[test]
     fn print_alive_character_when_alive() {
-        let cell = Cell::new(0, 0).set_alive();
+        let cell = Cell::new(0, 0);
+        let alive_cell = cell.set_alive();
 
-        assert_eq!(cell.display(), "*");
+        assert_eq!(alive_cell.display(), "*");
     }
 }
