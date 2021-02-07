@@ -1,2 +1,4 @@
+GOL_HOLE_BIN_DIR="/usr/local/bin"
+
 echo "Removing binary"
-rm -f /usr/local/bin/gol
+rm -f "${GOL_HOLE_BIN_DIR}"/gol
