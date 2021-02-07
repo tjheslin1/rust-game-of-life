@@ -1,2 +1,2 @@
 echo "Removing binary"
-rm /usr/local/bin/gol
+rm -f /usr/local/bin/gol

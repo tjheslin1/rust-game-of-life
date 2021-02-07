@@ -17,10 +17,10 @@ impl Config {
         let result = match arg_strs.as_slice() {
             [_, preset] => {
                 if preset == "help" {
-                    Err(format!("try: game_of_life
-try: game_of_life {:?}
-try: game_of_life [width height num_starting_cells seed] (e.g: game_of_life 40 40 40 4045)", 
-                    presets))//.iter().intersperse(",").collect::<String>()))
+                    Err(format!("try: gol
+try: gol {:?}
+try: gol [width height num_starting_cells seed] (e.g: gol 40 40 40 4045)", 
+                    presets))
                 }
                 else if presets.contains(&&preset[..]) {
                     Ok(Config::Preset { key: preset.to_string() })
