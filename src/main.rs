@@ -90,7 +90,7 @@ fn main() {
     		Config::Preset { ref key } =>
     			println!("{}: key = {}", i, key),
 			Config::WorldDef { seed, .. } =>
-				println!("for help: game_of_life help
+				println!("for help: gol help
 {}: seed = {}", i, seed),
     	}
         
