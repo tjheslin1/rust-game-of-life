@@ -29,7 +29,6 @@ impl World {
                         )
                         .set_alive(),
                     );
-                // row.push(cell.clone().set_alive());
                 } else {
                     row.push(Cell::new_with_characters(
                         x as u32,
@@ -37,7 +36,6 @@ impl World {
                         cell.dead_character.clone(),
                         cell.alive_character.clone(),
                     ));
-                    // row.push(cell.clone());
                 }
             }
             updated_cells.push(row);
