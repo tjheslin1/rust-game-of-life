@@ -39,7 +39,12 @@ impl Grid {
         for y in 0..height {
             let mut row: Vec<Cell> = vec![];
             for x in 0..width {
-                let cell = Cell::new_with_characters(x, y, dead_character.clone(), alive_character.clone());
+                let cell = Cell::new_with_characters(
+                    x,
+                    y,
+                    dead_character.clone(),
+                    alive_character.clone(),
+                );
                 let alive_cell = cell.set_alive();
 
                 if alive_cells.contains(&(x, y)) {
@@ -145,8 +150,8 @@ mod tests {
         let grid = Grid::new_alive_grid(
             10,
             1,
-            Some("_"),
-            Some("#"),
+            Some(String::from("_")),
+            Some(String::from("#")),
             vec![
                 (0, 0),
                 (1, 0),

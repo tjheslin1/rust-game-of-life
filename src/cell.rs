@@ -2,8 +2,8 @@
 pub struct Cell {
     pub x: u32,
     pub y: u32,
-    dead_character: String,
-    alive_character: String,
+    pub dead_character: String,
+    pub alive_character: String,
     pub alive: bool,
 }
 

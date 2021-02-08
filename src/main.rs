@@ -86,11 +86,13 @@ fn main() {
             }
 
             world = World {
-                grid: Grid::new_alive_grid(width, 
-                	height, 
-                	dead_char.clone(),
-                	alive_char.clone(),
-                	live_cells),
+                grid: Grid::new_alive_grid(
+                    width,
+                    height,
+                    dead_char.clone(),
+                    alive_char.clone(),
+                    live_cells,
+                ),
             };
         }
     }

@@ -15,13 +15,11 @@ pub enum Config {
 }
 
 impl Config {
-
     pub fn new(
         args: env::Args,
         default_world_def: Config,
         presets: Vec<&'static str>,
     ) -> Result<Config, String> {
-
         let args2 = args;
         let args_vec = args2.collect::<Vec<String>>();
         let args_slice = args_vec.as_slice();
@@ -71,7 +69,7 @@ try: gol [width height num_starting_cells seed display_dead display_alive] (e.g:
             args => Err(format!(
                 "Expected at least 4 or 6 args but got {}",
                 args.len() - 1
-            ))
+            )),
         };
 
         result
