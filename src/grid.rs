@@ -3,12 +3,12 @@ use itertools::Itertools;
 use crate::cell::Cell;
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Grid<'a> {
-    pub cells: Vec<Vec<Cell<'a>>>,
+pub struct Grid {
+    pub cells: Vec<Vec<Cell>>,
 }
 
-impl Grid<'_> {
-    pub fn new(width: u32, height: u32) -> Grid<'static> {
+impl Grid {
+    pub fn new(width: u32, height: u32) -> Grid {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
         for y in 0..height {
@@ -22,13 +22,13 @@ impl Grid<'_> {
         Grid { cells }
     }
 
-    pub fn new_alive_grid<'a>(
+    pub fn new_alive_grid(
         width: u32,
         height: u32,
-        dead_char: Option<&'a str>,
-        alive_char: Option<&'a str>,
+        dead_char: Option<&'static str>,
+        alive_char: Option<&'static str>,
         alive_cells: Vec<(u32, u32)>,
-    ) -> Grid<'a> {
+    ) -> Grid {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
         let (dead_character, alive_character) = match (dead_char, alive_char) {
@@ -40,7 +40,7 @@ impl Grid<'_> {
             let mut row: Vec<Cell> = vec![];
             for x in 0..width {
                 let cell = Cell::new_with_characters(x, y, dead_character, alive_character);
-                let alive_cell = cell.set_alive();
+                let alive_cell = cell; // .set_alive();
 
                 if alive_cells.contains(&(x, y)) {
                     row.push(alive_cell);

@@ -5,8 +5,8 @@ pub fn find(key: &String) -> Option<World> {
     match &key[..] {
         "gosper" => Some(World {
             grid: Grid::new_alive_grid(
-                40,
-                40,
+                40, 40,
+                Some("."), Some("#"),
                 vec![
                     (25, 1),
                     (23, 2),

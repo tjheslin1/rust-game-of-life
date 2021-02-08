@@ -1,14 +1,14 @@
-#[derive(Clone, Debug, PartialEq)]
-pub struct Cell<'a> {
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Cell {
     pub x: u32,
     pub y: u32,
-    alive_character: &'a str,
-    dead_character: &'a str,
+    alive_character: &'static str,
+    dead_character: &'static str,
     pub alive: bool,
 }
 
-impl Cell<'_> {
-    pub fn new(x: u32, y: u32) -> Cell<'static> {
+impl Cell {
+    pub fn new(x: u32, y: u32) -> Cell {
         Cell {
             x,
             y,
@@ -18,12 +18,12 @@ impl Cell<'_> {
         }
     }
 
-    pub fn new_with_characters<'a>(
+    pub fn new_with_characters(
         x: u32,
         y: u32,
-        alive_character: &'a str,
-        dead_character: &'a str,
-    ) -> Cell<'a> {
+        alive_character: &'static str,
+        dead_character: &'static str,
+    ) -> Cell {
         Cell {
             x,
             y,
