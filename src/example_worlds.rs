@@ -6,7 +6,7 @@ pub fn find(key: &String) -> Option<World> {
         "gosper" => Some(World {
             grid: Grid::new_alive_grid(
                 40, 40,
-                Some("."), Some("#"),
+                Some(String::from(".")), Some(String::from("#")),
                 vec![
                     (25, 1),
                     (23, 2),

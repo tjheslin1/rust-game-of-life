@@ -25,22 +25,22 @@ impl Grid {
     pub fn new_alive_grid(
         width: u32,
         height: u32,
-        dead_char: Option<&'static str>,
-        alive_char: Option<&'static str>,
+        dead_char: Option<String>,
+        alive_char: Option<String>,
         alive_cells: Vec<(u32, u32)>,
     ) -> Grid {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
         let (dead_character, alive_character) = match (dead_char, alive_char) {
             (Some(d), Some(a)) => (d, a),
-            _ => (".", "*"),
+            _ => (String::from("."), String::from("*")),
         };
 
         for y in 0..height {
             let mut row: Vec<Cell> = vec![];
             for x in 0..width {
-                let cell = Cell::new_with_characters(x, y, dead_character, alive_character);
-                let alive_cell = cell; // .set_alive();
+                let cell = Cell::new_with_characters(x, y, dead_character.clone(), alive_character.clone());
+                let alive_cell = cell.set_alive();
 
                 if alive_cells.contains(&(x, y)) {
                     row.push(alive_cell);

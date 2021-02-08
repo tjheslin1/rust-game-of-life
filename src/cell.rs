@@ -1,9 +1,9 @@
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Cell {
     pub x: u32,
     pub y: u32,
-    alive_character: &'static str,
-    dead_character: &'static str,
+    dead_character: String,
+    alive_character: String,
     pub alive: bool,
 }
 
@@ -12,8 +12,8 @@ impl Cell {
         Cell {
             x,
             y,
-            alive_character: "*",
-            dead_character: ".",
+            dead_character: String::from("."),
+            alive_character: String::from("*"),
             alive: false,
         }
     }
@@ -21,14 +21,14 @@ impl Cell {
     pub fn new_with_characters(
         x: u32,
         y: u32,
-        alive_character: &'static str,
-        dead_character: &'static str,
+        dead_character: String,
+        alive_character: String,
     ) -> Cell {
         Cell {
             x,
             y,
-            alive_character,
             dead_character,
+            alive_character,
             alive: false,
         }
     }
@@ -36,6 +36,8 @@ impl Cell {
     pub fn set_dead(&self) -> Cell {
         Cell {
             alive: false,
+            dead_character: self.dead_character.clone(),
+            alive_character: self.alive_character.clone(),
             ..*self
         }
     }
@@ -43,15 +45,17 @@ impl Cell {
     pub fn set_alive(&self) -> Cell {
         Cell {
             alive: true,
+            dead_character: self.dead_character.clone(),
+            alive_character: self.alive_character.clone(),
             ..*self
         }
     }
 
     pub fn display(&self) -> &str {
         if self.alive {
-            self.alive_character
+            &self.alive_character[..]
         } else {
-            self.dead_character
+            &self.dead_character[..]
         }
     }
 }

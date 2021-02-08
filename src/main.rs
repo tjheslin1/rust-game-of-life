@@ -27,8 +27,8 @@ fn main() {
         height: 40,
         num_starting_cells: 40,
         seed: rand::thread_rng().gen_range(1, 10000),
-        dead_char: Some("."),
-        alive_char: Some("*"),
+        dead_char: Some(String::from(".")),
+        alive_char: Some(String::from("*")),
     };
 
     let presets = vec!["gosper"];
@@ -60,8 +60,8 @@ fn main() {
             height,
             num_starting_cells,
             seed,
-            dead_char,
-            alive_char,
+            ref dead_char,
+            ref alive_char,
         } => {
             println!("seed = {}", seed);
 
@@ -88,8 +88,8 @@ fn main() {
             world = World {
                 grid: Grid::new_alive_grid(width, 
                 	height, 
-                	dead_char,
-                	alive_char,
+                	dead_char.clone(),
+                	alive_char.clone(),
                 	live_cells),
             };
         }

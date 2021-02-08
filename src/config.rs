@@ -1,6 +1,6 @@
 use std::env;
 
-pub enum Config<'a> {
+pub enum Config {
     Preset {
         key: String,
     },
@@ -9,18 +9,18 @@ pub enum Config<'a> {
         height: u32,
         num_starting_cells: u32,
         seed: u32,
-        dead_char: Option<&'a str>,
-        alive_char: Option<&'a str>,
+        dead_char: Option<String>,
+        alive_char: Option<String>,
     },
 }
 
-impl Config<'_> {
+impl Config {
 
-    pub fn new<'a>(
+    pub fn new(
         args: env::Args,
-        default_world_def: Config<'static>,
+        default_world_def: Config,
         presets: Vec<&'static str>,
-    ) -> Result<Config<'a>, String> {
+    ) -> Result<Config, String> {
 
         let args2 = args;
         let args_vec = args2.collect::<Vec<String>>();
@@ -64,8 +64,8 @@ try: gol [width height num_starting_cells seed display_dead display_alive] (e.g:
                     height,
                     num_starting_cells,
                     seed,
-                    dead_char: Some(&d),
-                    alive_char: Some(&a),
+                    dead_char: Some(d.to_owned()),
+                    alive_char: Some(a.to_owned()),
                 })
             }
             args => Err(format!(
