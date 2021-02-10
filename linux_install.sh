@@ -13,7 +13,6 @@ git clone -q --depth 1 https://github.com/tjheslin1/rust-game-of-life.git 1>/dev
 # chown -R "${USER}" 
 
 echo "Copying binary to /usr/local/bin/gol"
-# mv "${GOL_INSTALL_DIR}"/rust-game-of-life/release/game_of_life "${GOL_INSTALL_DIR}"/rust-game-of-life/release/gol
-# chmod +x "${GOL_INSTALL_DIR}"/rust-game-of-life/release/gol
-# cp /opt/game_of_life/rust-game-of-life/release/game_of_life /usr/local/bin/gol
+
+mv "${GOL_INSTALL_DIR}"/rust-game-of-life/release/game_of_life "${GOL_INSTALL_DIR}"/rust-game-of-life/release/gol
 install -o "${USER}" -Dm755 -t "${GOL_BIN_DIR}" "${GOL_INSTALL_DIR}"/rust-game-of-life/release/gol
