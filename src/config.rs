@@ -30,8 +30,11 @@ impl Config {
                     Err(format!(
                         "try: gol
 try: gol {:?}
-try: gol [width height num_starting_cells seed display_dead display_alive] (e.g: gol 40 40 40 4045)
-When providing your own display characters 
+try: gol [width height num_starting_cells seed display_dead display_alive] 
+
+$ gol 40 40 40 4045
+
+goWhen providing your own display characters 
 
 $ gol 40 40 40 4045 . #
 
