@@ -34,7 +34,7 @@ try: gol [width height num_starting_cells seed display_dead display_alive]
 
 $ gol 40 40 40 4045
 
-goWhen providing your own display characters 
+When providing your own display characters 
 
 $ gol 40 40 40 4045 . #
 
