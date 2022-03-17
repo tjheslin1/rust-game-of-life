@@ -2,22 +2,25 @@ use clap::Parser;
 
 #[derive(Parser)]
 pub struct Cli {
+    /// options: gosper
+    #[clap(short, long)]
+    pub preset: Option<String>,
     /// Width, in characters, of the world
     #[clap(short, long)]
-    width: u32,
+    pub width: Option<u32>,
     /// Height, in characters, of the world
     #[clap(short, long)]
-    height: u32,
+    pub height: Option<u32>,
     /// Number of cells that start alive
     #[clap(short, long)]
-    num_starting_cells: u32,
+    pub num_starting_cells: Option<u32>,
     /// A starting seed, to reproduce a previous world
     #[clap(short, long)]
-    seed: Option<u32>,
+    pub seed: Option<u32>,
     /// Character which represents a dead cell
     #[clap(short, long)]
-    dead_char: Option<String>,
+    pub dead_char: Option<String>,
     /// Character which represents an alive cell
     #[clap(short, long)]
-    alive_char: Option<String>,
+    pub alive_char: Option<String>,
 }
