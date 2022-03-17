@@ -8,13 +8,11 @@ use std::{thread, time};
 
 mod cell;
 mod cli;
-mod config;
 mod example_worlds;
 mod grid;
 mod world;
 
 use cli::Cli;
-use config::Config;
 use grid::Grid;
 use world::World;
 
