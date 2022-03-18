@@ -6,9 +6,11 @@ pub struct Cli {
     #[clap(short, long)]
     pub preset: Option<String>,
     /// Width, in characters, of the world
+    /// Default is 40
     #[clap(short, long)]
     pub width: Option<u32>,
     /// Height, in characters, of the world
+    /// Default is 40
     #[clap(short, long)]
     pub height: Option<u32>,
     /// Number of cells that start alive
@@ -23,4 +25,8 @@ pub struct Cli {
     /// Character which represents an alive cell
     #[clap(short, long)]
     pub alive_char: Option<String>,
+    /// Time, in milliseconds, that each generation lives for (lower to speed up simulation).
+    /// Default is 250
+    #[clap(short, long)]
+    pub gen_length: Option<u64>,
 }
