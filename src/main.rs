@@ -2,7 +2,6 @@ use clap::Parser;
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::cmp;
-use std::env;
 use std::process;
 use std::{thread, time};
 
