@@ -25,22 +25,6 @@ use world::World;
 fn main() {
     let args = Cli::parse();
 
-    // let default_world_def = Config::WorldDef {
-    //     width: 40,
-    //     height: 40,
-    //     num_starting_cells: 40,
-    //     seed: rand::thread_rng().gen_range(1, 10000),
-    //     dead_char: Some(String::from(".")),
-    //     alive_char: Some(String::from("*")),
-    // };
-
-    let presets = vec!["gosper"];
-
-    // let config = Config::new(env::args(), default_world_def, presets).unwrap_or_else(|err| {
-    //     eprintln!("{}", err);
-    //     process::exit(1);
-    // });
-
     let mut world = if let Some(ref key) = args.preset {
         match example_worlds::find(key) {
             Some(w) => w,
@@ -70,9 +54,10 @@ fn main() {
         }
     };
 
-    let five_hundred_millis = time::Duration::from_millis(250); // TODO: rename?
+    let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250)); // TODO: rename?
 
-    print!("\x1B[2J\x1B[1;1H");
+    clear_screen();
+
     for i in 1..1000 {
         if let Some(ref preset) = args.preset {
             println!("{}: key = {}", i, preset)
@@ -83,8 +68,9 @@ fn main() {
 
         print!("{}", world.grid.display());
 
-        thread::sleep(five_hundred_millis);
-        print!("\x1B[2J\x1B[1;1H");
+        thread::sleep(gen_length);
+
+        clear_screen();
 
         world = world.next();
     }
@@ -118,4 +104,8 @@ fn main() {
 
         live_cells
     }
+}
+
+fn clear_screen() {
+    print!("\x1B[2J\x1B[1;1H")
 }
