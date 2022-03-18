@@ -136,6 +136,16 @@ impl World {
 mod tests {
     use super::*;
 
+    #[test]
+    fn world_preserves_seed() {
+        let grid = Grid::new(1, 1);
+        let world = World { grid, seed: 55 };
+
+        let updated_world = world.next();
+
+        assert_eq!(world.seed, 55);
+    }
+
     /*
 
        .  ->  .
