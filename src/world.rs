@@ -4,6 +4,7 @@ use crate::grid::Grid;
 #[derive(Clone, Debug, PartialEq)]
 pub struct World {
     pub grid: Grid,
+    pub seed: u32,
 }
 
 impl World {
@@ -45,6 +46,7 @@ impl World {
             grid: Grid {
                 cells: updated_cells,
             },
+            ..*self
         }
     }
 
@@ -142,7 +144,7 @@ mod tests {
     #[test]
     fn update_tiny_world() {
         let grid = Grid::new(1, 1);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let updated_world = world.next();
 
@@ -170,10 +172,10 @@ mod tests {
         		(2, 3),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	5, 5, 
+        	5, 5,
             None, None,
         	vec![
         		(2, 1), (3, 1),
@@ -181,7 +183,7 @@ mod tests {
         		(2, 3),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -200,17 +202,17 @@ mod tests {
     #[rustfmt::skip]
     fn update_world_one_dead_cell_to_set_alive() {
         let grid = Grid::new_alive_grid(
-        	4, 4, 
+        	4, 4,
             None, None,
         	vec![
         		(1, 1), (2, 1),
         		(1, 2),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	4, 4, 
+        	4, 4,
             None, None,
         	vec![
         		(1, 1), (2, 1),
@@ -236,7 +238,7 @@ mod tests {
     #[rustfmt::skip]
     fn update_world_one_alive_cell_to_set_dead() {
         let grid = Grid::new_alive_grid(
-        	4, 4, 
+        	4, 4,
             None, None,
         	vec![
         		        (1, 0),
@@ -244,10 +246,10 @@ mod tests {
         		        (1, 2), (2, 2),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	4, 4, 
+        	4, 4,
             None, None,
         	vec![
         		(0, 0), (1, 0), (2, 0),
@@ -271,7 +273,7 @@ mod tests {
     #[test]
     fn find_all_neighbours() {
         let grid = Grid::new(2, 2);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);

@@ -66,6 +66,7 @@ fn main() {
                 Some(args.alive_char.unwrap_or("#".to_owned())), // TODO: new_alive_grid should not take Option
                 starting_cells(seed, width, height, num_starting_cells),
             ),
+            seed,
         }
     };
 
@@ -73,14 +74,12 @@ fn main() {
 
     print!("\x1B[2J\x1B[1;1H");
     for i in 1..1000 {
-        //         match config {
-        //             Config::Preset { ref key } => println!("{}: key = {}", i, key),
-        //             Config::WorldDef { seed, .. } => println!(
-        //                 "for help: gol help
-        // {}: seed = {}",
-        //                 i, seed
-        //             ),
-        //         }
+        if let Some(ref preset) = args.preset {
+            println!("{}: key = {}", i, preset)
+        } else {
+            println!("for help: --help");
+            println!("seed = {}; generation = {}", world.seed, i)
+        }
 
         print!("{}", world.grid.display());
 

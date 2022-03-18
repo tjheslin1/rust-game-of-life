@@ -48,6 +48,7 @@ pub fn find(key: &String) -> Option<World> {
                     (14, 9),
                 ],
             ),
+            seed: 0,
         }),
         _ => None,
     }
