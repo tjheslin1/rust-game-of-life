@@ -54,7 +54,7 @@ fn main() {
         }
     };
 
-    let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250)); // TODO: rename?
+    let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250));
 
     clear_screen();
 

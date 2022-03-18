@@ -219,7 +219,7 @@ mod tests {
         		(1, 2), (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -257,7 +257,7 @@ mod tests {
         		(0, 2),         (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -297,7 +297,7 @@ mod tests {
     #[test]
     fn find_neighbours_top_left_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);
@@ -327,7 +327,7 @@ mod tests {
     #[test]
     fn find_neighbours_in_centre() {
         let grid = Grid::new(10, 10);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(1, 1);
         let left_cell = &Cell::new(1, 2);
@@ -365,7 +365,7 @@ mod tests {
     #[test]
     fn find_neighbours_bottom_right_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 2);
         let left_cell = &Cell::new(2, 3);
@@ -389,7 +389,7 @@ mod tests {
     #[test]
     fn find_neighbours_left_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_cell = &Cell::new(0, 0);
         let below_cell = &Cell::new(0, 2);
@@ -421,7 +421,7 @@ mod tests {
     #[test]
     fn find_neighbours_right_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 1);
         let left_cell = &Cell::new(2, 2);
@@ -453,7 +453,7 @@ mod tests {
     #[test]
     fn find_neighbours_above_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let left_cell = &Cell::new(1, 0);
         let below_left_cell = &Cell::new(1, 1);
@@ -485,7 +485,7 @@ mod tests {
     #[test]
     fn find_neighbours_below_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(0, 2);
         let left_cell = &Cell::new(0, 3);
