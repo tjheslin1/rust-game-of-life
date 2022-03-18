@@ -46,8 +46,8 @@ fn main() {
             grid: Grid::new_alive_grid(
                 width,
                 height,
-                Some(args.dead_char.unwrap_or(".".to_owned())), // TODO: new_alive_grid should not take Option
-                Some(args.alive_char.unwrap_or("#".to_owned())), // TODO: new_alive_grid should not take Option
+                args.dead_char.unwrap_or(".".to_owned()),
+                args.alive_char.unwrap_or("#".to_owned()),
                 starting_cells(seed, width, height, num_starting_cells),
             ),
             seed,
