@@ -27,6 +27,7 @@ impl Game<GameOfLife> for GameOfLife {
                             x as u32,
                             y as u32,
                             cell.dead_character.clone(),
+                            cell.dying_character.clone(),
                             cell.alive_character.clone(),
                         )
                         .set_alive(),
@@ -36,6 +37,7 @@ impl Game<GameOfLife> for GameOfLife {
                         x as u32,
                         y as u32,
                         cell.dead_character.clone(),
+                        cell.dying_character.clone(),
                         cell.alive_character.clone(),
                     ));
                 }
@@ -174,7 +176,7 @@ mod tests {
     fn update_static_world() {
         let grid = Grid::new_alive_grid(
         	5, 5,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		(2, 1), (3, 1),
         		(1, 2),  (3, 2),
@@ -185,7 +187,7 @@ mod tests {
 
         let expected_grid = Grid::new_alive_grid(
         	5, 5,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		(2, 1), (3, 1),
         		(1, 2),  (3, 2),
@@ -212,7 +214,7 @@ mod tests {
     fn update_world_one_dead_cell_to_set_alive() {
         let grid = Grid::new_alive_grid(
         	4, 4,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		(1, 1), (2, 1),
         		(1, 2),
@@ -222,7 +224,7 @@ mod tests {
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		(1, 1), (2, 1),
         		(1, 2), (2, 2),
@@ -248,7 +250,7 @@ mod tests {
     fn update_world_one_alive_cell_to_set_dead() {
         let grid = Grid::new_alive_grid(
         	4, 4,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		        (1, 0),
         		(0, 1), (1, 1), (2, 1),
@@ -259,7 +261,7 @@ mod tests {
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
-            String::new(), String::new(),
+            String::new(), String::new(), String::new(),
         	vec![
         		(0, 0), (1, 0), (2, 0),
         		(0, 1),

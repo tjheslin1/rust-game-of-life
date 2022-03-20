@@ -1,5 +1,5 @@
-use crate::grid::Grid;
 use crate::game_of_life::GameOfLife;
+use crate::grid::Grid;
 
 pub fn find(key: &str) -> Option<GameOfLife> {
     match key {
@@ -8,6 +8,7 @@ pub fn find(key: &str) -> Option<GameOfLife> {
                 40,
                 40,
                 String::from("."),
+                String::from("x"),
                 String::from("#"),
                 vec![
                     (25, 1),

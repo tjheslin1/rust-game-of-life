@@ -22,6 +22,9 @@ pub struct Cli {
     /// Character which represents a dead cell
     #[clap(short, long)]
     pub dead_char: Option<String>,
+    /// Character which represents a dying cell
+    #[clap(short = 'x', long)]
+    pub dying_char: Option<String>,
     /// Character which represents an alive cell
     #[clap(short, long)]
     pub alive_char: Option<String>,

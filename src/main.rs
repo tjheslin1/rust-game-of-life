@@ -48,6 +48,7 @@ fn main() {
                 width,
                 height,
                 args.dead_char.unwrap_or_else(|| ".".to_owned()),
+                args.dying_char.unwrap_or_else(|| "x".to_owned()),
                 args.alive_char.unwrap_or_else(|| "#".to_owned()),
                 starting_cells(seed, width, height, num_starting_cells),
             ),
