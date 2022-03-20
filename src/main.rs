@@ -33,7 +33,9 @@ fn main() {
             }
         }
     } else {
-        let seed = args.seed.unwrap_or(rand::thread_rng().gen_range(1, 10000));
+        let seed = args
+            .seed
+            .unwrap_or_else(|| rand::thread_rng().gen_range(1, 10000));
 
         println!("seed = {}", seed);
 
@@ -45,8 +47,8 @@ fn main() {
             grid: Grid::new_alive_grid(
                 width,
                 height,
-                args.dead_char.unwrap_or(".".to_owned()),
-                args.alive_char.unwrap_or("#".to_owned()),
+                args.dead_char.unwrap_or_else(|| ".".to_owned()),
+                args.alive_char.unwrap_or_else(|| "#".to_owned()),
                 starting_cells(seed, width, height, num_starting_cells),
             ),
             seed,

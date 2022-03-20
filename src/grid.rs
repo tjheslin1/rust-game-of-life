@@ -50,8 +50,7 @@ impl Grid {
     }
 
     pub fn display(&self) -> String {
-        let x: String = self
-            .cells
+        self.cells
             .iter()
             .map(|row| {
                 row.iter()
@@ -60,9 +59,7 @@ impl Grid {
                     .collect::<String>()
             })
             .intersperse("\n".to_string())
-            .collect();
-
-        format!("{}", x)
+            .collect()
     }
 }
 

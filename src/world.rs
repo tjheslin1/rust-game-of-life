@@ -54,19 +54,13 @@ impl World {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
         if cell.alive {
-            if alive_neighbours_count < 2 {
-                return false;
-            } else if alive_neighbours_count > 3 {
-                return false;
+            if alive_neighbours_count < 2 || alive_neighbours_count > 3 {
+                false
             } else {
-                return true;
+                true
             }
         } else {
-            if alive_neighbours_count == 3 {
-                return true;
-            } else {
-                return false;
-            }
+            alive_neighbours_count == 3
         }
     }
 

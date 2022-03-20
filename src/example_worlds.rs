@@ -1,8 +1,8 @@
 use crate::grid::Grid;
 use crate::world::World;
 
-pub fn find(key: &String) -> Option<World> {
-    match &key[..] {
+pub fn find(key: &str) -> Option<World> {
+    match key {
         "gosper" => Some(World {
             grid: Grid::new_alive_grid(
                 40,
