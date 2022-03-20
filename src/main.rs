@@ -13,13 +13,11 @@ mod world;
 
 use cli::Cli;
 use grid::Grid;
-use world::World;
+use world::{Game, GameOfLifeWorld};
 
 /*
     memorable seeds:
-    - 43 (starting cells = 40)
     - 4045 (starting cells = 40)
-    - 3658 (starting cells = 40)
 */
 fn main() {
     let args = Cli::parse();
@@ -43,7 +41,7 @@ fn main() {
         let height = args.height.unwrap_or(40);
         let num_starting_cells = args.num_starting_cells.unwrap_or(40);
 
-        World {
+        GameOfLifeWorld {
             grid: Grid::new_alive_grid(
                 width,
                 height,
@@ -73,7 +71,8 @@ fn main() {
 
         clear_screen();
 
-        world = world.next();
+        world = Game::next(&world)
+        // world = world.next();
     }
 
     fn starting_cells(

@@ -2,13 +2,17 @@ use crate::cell::Cell;
 use crate::grid::Grid;
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct World {
+pub struct GameOfLifeWorld {
     pub grid: Grid,
     pub seed: u32,
 }
 
-impl World {
-    pub fn next(&self) -> World {
+pub trait Game<T> {
+    fn next(&self) -> T;
+}
+
+impl Game<GameOfLifeWorld> for GameOfLifeWorld {
+    fn next(&self) -> GameOfLifeWorld {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
 
@@ -20,7 +24,7 @@ impl World {
                 let cell = &self.grid.cells[y][x];
                 let neighbours = self.neighbours(cell);
 
-                if World::is_alive(cell, neighbours) {
+                if GameOfLifeWorld::is_alive(cell, neighbours) {
                     row.push(
                         Cell::new_with_characters(
                             x as u32,
@@ -42,14 +46,16 @@ impl World {
             updated_cells.push(row);
         }
 
-        World {
+        GameOfLifeWorld {
             grid: Grid {
                 cells: updated_cells,
             },
             ..*self
         }
     }
+}
 
+impl GameOfLifeWorld {
     pub fn is_alive(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
@@ -133,7 +139,7 @@ mod tests {
     #[test]
     fn world_preserves_seed() {
         let grid = Grid::new(1, 1);
-        let world = World { grid, seed: 55 };
+        let world = GameOfLifeWorld { grid, seed: 55 };
 
         assert_eq!(world.seed, 55);
     }
@@ -146,7 +152,7 @@ mod tests {
     #[test]
     fn update_tiny_world() {
         let grid = Grid::new(1, 1);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let updated_world = world.next();
 
@@ -174,7 +180,7 @@ mod tests {
         		(2, 3),
         	],
     	);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	5, 5,
@@ -185,7 +191,7 @@ mod tests {
         		(2, 3),
         	],
     	);
-        let expected_world = World { grid: expected_grid, seed: 0 };
+        let expected_world = GameOfLifeWorld { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -211,7 +217,7 @@ mod tests {
         		(1, 2),
         	],
     	);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
@@ -221,7 +227,7 @@ mod tests {
         		(1, 2), (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid, seed: 0 };
+        let expected_world = GameOfLifeWorld { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -248,7 +254,7 @@ mod tests {
         		        (1, 2), (2, 2),
         	],
     	);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
@@ -259,7 +265,7 @@ mod tests {
         		(0, 2),         (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid, seed: 0 };
+        let expected_world = GameOfLifeWorld { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -275,7 +281,7 @@ mod tests {
     #[test]
     fn find_all_neighbours() {
         let grid = Grid::new(2, 2);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);
@@ -299,7 +305,7 @@ mod tests {
     #[test]
     fn find_neighbours_top_left_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);
@@ -329,7 +335,7 @@ mod tests {
     #[test]
     fn find_neighbours_in_centre() {
         let grid = Grid::new(10, 10);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(1, 1);
         let left_cell = &Cell::new(1, 2);
@@ -367,7 +373,7 @@ mod tests {
     #[test]
     fn find_neighbours_bottom_right_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 2);
         let left_cell = &Cell::new(2, 3);
@@ -391,7 +397,7 @@ mod tests {
     #[test]
     fn find_neighbours_left_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let above_cell = &Cell::new(0, 0);
         let below_cell = &Cell::new(0, 2);
@@ -423,7 +429,7 @@ mod tests {
     #[test]
     fn find_neighbours_right_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 1);
         let left_cell = &Cell::new(2, 2);
@@ -455,7 +461,7 @@ mod tests {
     #[test]
     fn find_neighbours_above_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let left_cell = &Cell::new(1, 0);
         let below_left_cell = &Cell::new(1, 1);
@@ -487,7 +493,7 @@ mod tests {
     #[test]
     fn find_neighbours_below_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid, seed: 0 };
+        let world = GameOfLifeWorld { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(0, 2);
         let left_cell = &Cell::new(0, 3);
@@ -518,7 +524,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -533,7 +539,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -549,7 +555,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three, cell_four];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -564,7 +570,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
@@ -579,7 +585,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
@@ -594,7 +600,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, true);
     }
@@ -609,7 +615,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
@@ -625,7 +631,7 @@ mod tests {
 
         let neighbours = vec![cell_one, cell_two, cell_three, cell_four];
 
-        let is_alive = World::is_alive(&alive_cell, neighbours);
+        let is_alive = GameOfLifeWorld::is_alive(&alive_cell, neighbours);
 
         assert_eq!(is_alive, false);
     }
