@@ -89,7 +89,6 @@ fn main() {
         let width_offset = cmp::max(1, width / 8);
         let height_offset = cmp::max(1, height / 8);
 
-        // TODO: refactor
         for _ in 1..num_starting_cells {
             live_cells.push((
                 rng.gen_range(
