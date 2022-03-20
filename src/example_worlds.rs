@@ -1,9 +1,9 @@
 use crate::grid::Grid;
-use crate::game_of_life::GameOfLifeWorld;
+use crate::game_of_life::GameOfLife;
 
-pub fn find(key: &str) -> Option<GameOfLifeWorld> {
+pub fn find(key: &str) -> Option<GameOfLife> {
     match key {
-        "gosper" => Some(GameOfLifeWorld {
+        "gosper" => Some(GameOfLife {
             grid: Grid::new_alive_grid(
                 40,
                 40,

@@ -14,7 +14,7 @@ mod grid;
 
 use cli::Cli;
 use game::Game;
-use game_of_life::GameOfLifeWorld;
+use game_of_life::GameOfLife;
 use grid::Grid;
 
 /*
@@ -43,7 +43,7 @@ fn main() {
         let height = args.height.unwrap_or(40);
         let num_starting_cells = args.num_starting_cells.unwrap_or(40);
 
-        GameOfLifeWorld {
+        GameOfLife {
             grid: Grid::new_alive_grid(
                 width,
                 height,
