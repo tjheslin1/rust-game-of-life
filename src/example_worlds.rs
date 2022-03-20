@@ -1,5 +1,5 @@
 use crate::grid::Grid;
-use crate::world::GameOfLifeWorld;
+use crate::game_of_life::GameOfLifeWorld;
 
 pub fn find(key: &str) -> Option<GameOfLifeWorld> {
     match key {

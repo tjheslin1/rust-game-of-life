@@ -1,14 +1,11 @@
 use crate::cell::Cell;
+use crate::game::Game;
 use crate::grid::Grid;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct GameOfLifeWorld {
     pub grid: Grid,
     pub seed: u32,
-}
-
-pub trait Game<T> {
-    fn next(&self) -> T;
 }
 
 impl Game<GameOfLifeWorld> for GameOfLifeWorld {
@@ -136,12 +133,16 @@ impl GameOfLifeWorld {
 mod tests {
     use super::*;
 
+    use crate::game::Game;
+
     #[test]
     fn world_preserves_seed() {
         let grid = Grid::new(1, 1);
         let world = GameOfLifeWorld { grid, seed: 55 };
 
-        assert_eq!(world.seed, 55);
+        let updated_world = world.next();
+
+        assert_eq!(updated_world.seed, 55);
     }
 
     /*

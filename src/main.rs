@@ -8,12 +8,14 @@ use std::{thread, time};
 mod cell;
 mod cli;
 mod example_worlds;
+mod game;
+mod game_of_life;
 mod grid;
-mod world;
 
 use cli::Cli;
+use game::Game;
+use game_of_life::GameOfLifeWorld;
 use grid::Grid;
-use world::{Game, GameOfLifeWorld};
 
 /*
     memorable seeds:
@@ -71,8 +73,7 @@ fn main() {
 
         clear_screen();
 
-        world = Game::next(&world)
-        // world = world.next();
+        world = world.next();
     }
 
     fn starting_cells(
