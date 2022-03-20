@@ -4,6 +4,7 @@ use crate::grid::Grid;
 #[derive(Clone, Debug, PartialEq)]
 pub struct World {
     pub grid: Grid,
+    pub seed: u32,
 }
 
 impl World {
@@ -45,6 +46,7 @@ impl World {
             grid: Grid {
                 cells: updated_cells,
             },
+            ..*self
         }
     }
 
@@ -52,19 +54,13 @@ impl World {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
         if cell.alive {
-            if alive_neighbours_count < 2 {
-                return false;
-            } else if alive_neighbours_count > 3 {
-                return false;
+            if alive_neighbours_count < 2 || alive_neighbours_count > 3 {
+                false
             } else {
-                return true;
+                true
             }
         } else {
-            if alive_neighbours_count == 3 {
-                return true;
-            } else {
-                return false;
-            }
+            alive_neighbours_count == 3
         }
     }
 
@@ -134,6 +130,14 @@ impl World {
 mod tests {
     use super::*;
 
+    #[test]
+    fn world_preserves_seed() {
+        let grid = Grid::new(1, 1);
+        let world = World { grid, seed: 55 };
+
+        assert_eq!(world.seed, 55);
+    }
+
     /*
 
        .  ->  .
@@ -142,7 +146,7 @@ mod tests {
     #[test]
     fn update_tiny_world() {
         let grid = Grid::new(1, 1);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let updated_world = world.next();
 
@@ -163,25 +167,25 @@ mod tests {
     fn update_static_world() {
         let grid = Grid::new_alive_grid(
         	5, 5,
-            None, None,
+            String::new(), String::new(),
         	vec![
         		(2, 1), (3, 1),
         		(1, 2),  (3, 2),
         		(2, 3),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	5, 5, 
-            None, None,
+        	5, 5,
+            String::new(), String::new(),
         	vec![
         		(2, 1), (3, 1),
         		(1, 2),  (3, 2),
         		(2, 3),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -200,24 +204,24 @@ mod tests {
     #[rustfmt::skip]
     fn update_world_one_dead_cell_to_set_alive() {
         let grid = Grid::new_alive_grid(
-        	4, 4, 
-            None, None,
+        	4, 4,
+            String::new(), String::new(),
         	vec![
         		(1, 1), (2, 1),
         		(1, 2),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	4, 4, 
-            None, None,
+        	4, 4,
+            String::new(), String::new(),
         	vec![
         		(1, 1), (2, 1),
         		(1, 2), (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -236,26 +240,26 @@ mod tests {
     #[rustfmt::skip]
     fn update_world_one_alive_cell_to_set_dead() {
         let grid = Grid::new_alive_grid(
-        	4, 4, 
-            None, None,
+        	4, 4,
+            String::new(), String::new(),
         	vec![
         		        (1, 0),
         		(0, 1), (1, 1), (2, 1),
         		        (1, 2), (2, 2),
         	],
     	);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
-        	4, 4, 
-            None, None,
+        	4, 4,
+            String::new(), String::new(),
         	vec![
         		(0, 0), (1, 0), (2, 0),
         		(0, 1),
         		(0, 2),         (2, 2),
         	],
     	);
-        let expected_world = World { grid: expected_grid };
+        let expected_world = World { grid: expected_grid, seed: 0 };
 
         let actual_world = world.next();
 
@@ -271,7 +275,7 @@ mod tests {
     #[test]
     fn find_all_neighbours() {
         let grid = Grid::new(2, 2);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);
@@ -295,7 +299,7 @@ mod tests {
     #[test]
     fn find_neighbours_top_left_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let below_cell = &Cell::new(0, 1);
         let right_cell = &Cell::new(1, 0);
@@ -325,7 +329,7 @@ mod tests {
     #[test]
     fn find_neighbours_in_centre() {
         let grid = Grid::new(10, 10);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(1, 1);
         let left_cell = &Cell::new(1, 2);
@@ -363,7 +367,7 @@ mod tests {
     #[test]
     fn find_neighbours_bottom_right_corner() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 2);
         let left_cell = &Cell::new(2, 3);
@@ -387,7 +391,7 @@ mod tests {
     #[test]
     fn find_neighbours_left_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_cell = &Cell::new(0, 0);
         let below_cell = &Cell::new(0, 2);
@@ -419,7 +423,7 @@ mod tests {
     #[test]
     fn find_neighbours_right_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(2, 1);
         let left_cell = &Cell::new(2, 2);
@@ -451,7 +455,7 @@ mod tests {
     #[test]
     fn find_neighbours_above_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let left_cell = &Cell::new(1, 0);
         let below_left_cell = &Cell::new(1, 1);
@@ -483,7 +487,7 @@ mod tests {
     #[test]
     fn find_neighbours_below_edge() {
         let grid = Grid::new(4, 4);
-        let world = World { grid };
+        let world = World { grid, seed: 0 };
 
         let above_left_cell = &Cell::new(0, 2);
         let left_cell = &Cell::new(0, 3);

@@ -25,26 +25,16 @@ impl Grid {
     pub fn new_alive_grid(
         width: u32,
         height: u32,
-        dead_char: Option<String>,
-        alive_char: Option<String>,
+        dead_char: String,
+        alive_char: String,
         alive_cells: Vec<(u32, u32)>,
     ) -> Grid {
         let mut cells: Vec<Vec<Cell>> = vec![];
 
-        let (dead_character, alive_character) = match (dead_char, alive_char) {
-            (Some(d), Some(a)) => (d, a),
-            _ => (String::from("."), String::from("*")),
-        };
-
         for y in 0..height {
             let mut row: Vec<Cell> = vec![];
             for x in 0..width {
-                let cell = Cell::new_with_characters(
-                    x,
-                    y,
-                    dead_character.clone(),
-                    alive_character.clone(),
-                );
+                let cell = Cell::new_with_characters(x, y, dead_char.clone(), alive_char.clone());
                 let alive_cell = cell.set_alive();
 
                 if alive_cells.contains(&(x, y)) {
@@ -60,8 +50,7 @@ impl Grid {
     }
 
     pub fn display(&self) -> String {
-        let x: String = self
-            .cells
+        self.cells
             .iter()
             .map(|row| {
                 row.iter()
@@ -70,9 +59,7 @@ impl Grid {
                     .collect::<String>()
             })
             .intersperse("\n".to_string())
-            .collect();
-
-        format!("{}", x)
+            .collect()
     }
 }
 
@@ -126,8 +113,8 @@ mod tests {
         let grid = Grid::new_alive_grid(
             10,
             1,
-            None,
-            None,
+            ".".to_owned(),
+            "*".to_owned(),
             vec![
                 (0, 0),
                 (1, 0),
@@ -150,8 +137,8 @@ mod tests {
         let grid = Grid::new_alive_grid(
             10,
             1,
-            Some(String::from("_")),
-            Some(String::from("#")),
+            String::from("_"),
+            String::from("#"),
             vec![
                 (0, 0),
                 (1, 0),
@@ -191,10 +178,10 @@ mod tests {
     #[test]
     #[rustfmt::skip]
     fn display_square_grid_of_alive_cells() {
-        
+
         let grid = Grid::new_alive_grid(
             10, 10,
-            None, None,
+            ".".to_owned(), "*".to_owned(),
             vec![
                 (0, 0),(0, 1),(0, 2),(0, 3),(0, 4),(0, 5),(0, 6),(0, 7),(0, 8),(0, 9),
                 (1, 0),(1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 7),(1, 8),(1, 9),
@@ -226,7 +213,7 @@ mod tests {
 
     #[test]
     fn display_square_grid_with_one_alive_cell() {
-        let grid = Grid::new_alive_grid(10, 10, None, None, vec![(2, 3)]);
+        let grid = Grid::new_alive_grid(10, 10, ".".to_owned(), "*".to_owned(), vec![(2, 3)]);
 
         assert_eq!(
             grid.display(),

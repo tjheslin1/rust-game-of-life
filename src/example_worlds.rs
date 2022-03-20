@@ -1,14 +1,14 @@
 use crate::grid::Grid;
 use crate::world::World;
 
-pub fn find(key: &String) -> Option<World> {
-    match &key[..] {
+pub fn find(key: &str) -> Option<World> {
+    match key {
         "gosper" => Some(World {
             grid: Grid::new_alive_grid(
                 40,
                 40,
-                Some(String::from(".")),
-                Some(String::from("#")),
+                String::from("."),
+                String::from("#"),
                 vec![
                     (25, 1),
                     (23, 2),
@@ -48,6 +48,7 @@ pub fn find(key: &String) -> Option<World> {
                     (14, 9),
                 ],
             ),
+            seed: 0,
         }),
         _ => None,
     }

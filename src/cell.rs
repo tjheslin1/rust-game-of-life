@@ -33,6 +33,7 @@ impl Cell {
         }
     }
 
+    #[allow(dead_code)]
     pub fn set_dead(&self) -> Cell {
         Cell {
             alive: false,
