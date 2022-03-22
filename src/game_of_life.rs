@@ -1,6 +1,6 @@
 use crate::cell::Cell;
-use crate::game::Game;
 use crate::grid::Grid;
+use crate::ruleset::Ruleset;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct GameOfLife {
@@ -8,7 +8,9 @@ pub struct GameOfLife {
     pub seed: u32,
 }
 
-impl Game<GameOfLife> for GameOfLife {
+impl Ruleset for GameOfLife {
+    type Rules = GameOfLife;
+
     fn next(&self) -> GameOfLife {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
@@ -135,7 +137,7 @@ impl GameOfLife {
 mod tests {
     use super::*;
 
-    use crate::game::Game;
+    use crate::ruleset::Ruleset;
 
     #[test]
     fn world_preserves_seed() {

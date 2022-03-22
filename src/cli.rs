@@ -5,6 +5,9 @@ pub struct Cli {
     /// options: gosper
     #[clap(short, long)]
     pub preset: Option<String>,
+    /// options: game_of_life (default), brians_brain
+    #[clap(short, long)]
+    pub ruleset: Option<String>,
     /// Width, in characters, of the world
     /// Default is 40
     #[clap(short, long)]

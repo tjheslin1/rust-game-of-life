@@ -5,17 +5,19 @@ use std::cmp;
 use std::process;
 use std::{thread, time};
 
+mod brians_brain;
 mod cell;
 mod cli;
 mod example_worlds;
-mod game;
 mod game_of_life;
 mod grid;
+mod ruleset;
 
+use brians_brain::BriansBrain;
 use cli::Cli;
-use game::Game;
 use game_of_life::GameOfLife;
 use grid::Grid;
+use ruleset::Ruleset;
 
 /*
     memorable seeds:

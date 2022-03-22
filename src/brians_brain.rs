@@ -1,6 +1,6 @@
 use crate::cell::Cell;
-use crate::game::Game;
 use crate::grid::Grid;
+use crate::ruleset::Ruleset;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BriansBrain {
@@ -26,7 +26,7 @@ impl BriansBrain {
 mod tests {
     use super::*;
 
-    use crate::game::Game;
+    use crate::ruleset::Ruleset;
 
     #[test]
     fn world_preserves_seed() {
