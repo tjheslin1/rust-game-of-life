@@ -26,7 +26,7 @@ use ruleset::Ruleset;
 fn main() {
     let args = Cli::parse();
 
-    let mut world = if let Some(ref key) = args.preset {
+    let mut world: dyn Ruleset = if let Some(ref key) = args.preset {
         match example_worlds::find(key) {
             Some(w) => w,
             _ => {
@@ -45,17 +45,34 @@ fn main() {
         let height = args.height.unwrap_or(40);
         let num_starting_cells = args.num_starting_cells.unwrap_or(40);
 
-        GameOfLife {
-            grid: Grid::new_alive_grid(
-                width,
-                height,
-                args.dead_char.unwrap_or_else(|| ".".to_owned()),
-                args.dying_char.unwrap_or_else(|| "x".to_owned()),
-                args.alive_char.unwrap_or_else(|| "#".to_owned()),
-                starting_cells(seed, width, height, num_starting_cells),
-            ),
-            seed,
-        }
+        let grid = Grid::new_alive_grid(
+            width,
+            height,
+            args.dead_char.unwrap_or_else(|| ".".to_owned()),
+            args.dying_char.unwrap_or_else(|| "x".to_owned()),
+            args.alive_char.unwrap_or_else(|| "#".to_owned()),
+            starting_cells(seed, width, height, num_starting_cells),
+        );
+
+        let result: dyn Ruleset = args
+            .ruleset
+            .map(|r| match r {
+                rule if rule.starts_with("game_of") || rule.starts_with("gameof") => GameOfLife {
+                    grid: grid.clone(),
+                    seed,
+                },
+                rule if rule.starts_with("brian") => BriansBrain {
+                    grid: grid.clone(),
+                    seed,
+                },
+                rule => panic!("Unknown ruleset: {}", rule),
+            })
+            .unwrap_or(GameOfLife {
+                grid: grid.clone(),
+                seed,
+            });
+
+        result
     };
 
     let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250));

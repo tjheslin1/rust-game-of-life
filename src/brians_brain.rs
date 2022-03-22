@@ -8,11 +8,19 @@ pub struct BriansBrain {
     pub seed: u32,
 }
 
-impl Game<BriansBrain> for BriansBrain {
-    fn next(&self) -> BriansBrain {}
+impl Ruleset for BriansBrain {
+    type Rules = BriansBrain;
+
+    fn next(&self) -> BriansBrain {
+        unimplemented!("todo")
+    }
 }
 
 impl BriansBrain {
+    pub fn is_dying(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
+        unimplemented!("todo")
+    }
+
     pub fn is_alive(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         unimplemented!("todo")
     }
