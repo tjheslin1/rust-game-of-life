@@ -1,6 +1,6 @@
 use crate::cell::Cell;
 use crate::grid::Grid;
-use crate::world::Generation;
+use crate::world::Simulation;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BriansBrain {
@@ -8,7 +8,7 @@ pub struct BriansBrain {
     pub seed: u32,
 }
 
-impl Generation for BriansBrain {
+impl Simulation for BriansBrain {
     fn seed(&self) -> &u32 {
         &self.seed
     }

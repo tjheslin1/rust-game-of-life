@@ -1,6 +1,6 @@
 use crate::grid::Grid;
 
-pub trait Generation {
+pub trait Simulation {
     fn seed(&self) -> &u32;
     fn grid(&self) -> &Grid;
 
@@ -8,5 +8,5 @@ pub trait Generation {
 }
 
 pub struct World {
-    pub game: Box<dyn Generation>,
+    pub game: Box<dyn Simulation>,
 }
