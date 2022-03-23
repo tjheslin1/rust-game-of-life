@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::grid::Grid;
+use crate::world::Generation;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct GameOfLife {
@@ -7,8 +8,16 @@ pub struct GameOfLife {
     pub seed: u32,
 }
 
-impl GameOfLife {
-    pub fn next(&self) -> GameOfLife {
+impl Generation for GameOfLife {
+    fn seed(&self) -> &u32 {
+        &self.seed
+    }
+
+    fn grid(&self) -> &Grid {
+        &self.grid
+    }
+
+    fn next(&mut self) {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
 
@@ -44,14 +53,11 @@ impl GameOfLife {
             updated_cells.push(row);
         }
 
-        GameOfLife {
-            grid: Grid {
-                cells: updated_cells,
-            },
-            ..*self
-        }
+        self.grid.cells = updated_cells;
     }
+}
 
+impl GameOfLife {
     pub fn is_alive(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
@@ -135,11 +141,11 @@ mod tests {
     #[test]
     fn world_preserves_seed() {
         let grid = Grid::new(1, 1);
-        let world = GameOfLife { grid, seed: 55 };
+        let mut world = GameOfLife { grid, seed: 55 };
 
-        let updated_world = world.next();
+        world.next();
 
-        assert_eq!(updated_world.seed, 55);
+        assert_eq!(world.seed, 55);
     }
 
     /*
@@ -150,11 +156,11 @@ mod tests {
     #[test]
     fn update_tiny_world() {
         let grid = Grid::new(1, 1);
-        let world = GameOfLife { grid, seed: 0 };
+        let mut world = GameOfLife { grid, seed: 0 };
 
-        let updated_world = world.next();
+        world.next();
 
-        assert_eq!(world, updated_world);
+        assert_eq!(world, world);
     }
 
     /*
@@ -178,7 +184,7 @@ mod tests {
         		(2, 3),
         	],
     	);
-        let world = GameOfLife { grid, seed: 0 };
+        let mut world = GameOfLife { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	5, 5,
@@ -191,9 +197,9 @@ mod tests {
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
-        let actual_world = world.next();
+        world.next();
 
-        assert_eq!(expected_world, actual_world);
+        assert_eq!(expected_world, world);
     }
 
     /*
@@ -215,7 +221,7 @@ mod tests {
         		(1, 2),
         	],
     	);
-        let world = GameOfLife { grid, seed: 0 };
+        let mut world = GameOfLife { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
@@ -227,9 +233,9 @@ mod tests {
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
-        let actual_world = world.next();
+        world.next();
 
-        assert_eq!(expected_world, actual_world);
+        assert_eq!(expected_world, world);
     }
 
     /*
@@ -252,7 +258,7 @@ mod tests {
         		        (1, 2), (2, 2),
         	],
     	);
-        let world = GameOfLife { grid, seed: 0 };
+        let mut world = GameOfLife { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
         	4, 4,
@@ -265,9 +271,9 @@ mod tests {
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
-        let actual_world = world.next();
+        world.next();
 
-        assert_eq!(expected_world, actual_world);
+        assert_eq!(expected_world, world);
     }
 
     /*

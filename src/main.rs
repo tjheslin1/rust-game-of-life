@@ -11,11 +11,13 @@ mod cli;
 mod example_worlds;
 mod game_of_life;
 mod grid;
+mod world;
 
 use brians_brain::BriansBrain;
 use cli::Cli;
 use game_of_life::GameOfLife;
 use grid::Grid;
+use world::World;
 
 /*
     memorable seeds:
@@ -24,7 +26,7 @@ use grid::Grid;
 fn main() {
     let args = Cli::parse();
 
-    let mut world: GameOfLife = if let Some(ref key) = args.preset {
+    let mut world: World = if let Some(ref key) = args.preset {
         match example_worlds::find(key) {
             Some(w) => w,
             _ => {
@@ -52,12 +54,13 @@ fn main() {
             starting_cells(seed, width, height, num_starting_cells),
         );
 
-        let result: GameOfLife = args
-            .ruleset
+        args.ruleset
             .map(|r| match r {
-                rule if rule.starts_with("game_of") || rule.starts_with("gameof") => GameOfLife {
-                    grid: grid.clone(),
-                    seed,
+                rule if rule.starts_with("game_of") || rule.starts_with("gameof") => World {
+                    game: Box::new(GameOfLife {
+                        grid: grid.clone(),
+                        seed,
+                    }),
                 },
                 // rule if rule.starts_with("brian") => BriansBrain {
                 //     grid: grid.clone(),
@@ -65,12 +68,12 @@ fn main() {
                 // },
                 rule => panic!("Unknown ruleset: {}", rule),
             })
-            .unwrap_or(GameOfLife {
-                grid: grid.clone(),
-                seed,
-            });
-
-        result
+            .unwrap_or(World {
+                game: Box::new(GameOfLife {
+                    grid: grid.clone(),
+                    seed,
+                }),
+            })
     };
 
     let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250));
@@ -82,16 +85,16 @@ fn main() {
             println!("{}: key = {}", i, preset)
         } else {
             println!("for help: --help");
-            println!("seed = {}; generation = {}", world.seed, i)
+            println!("seed = {}; generation = {}", world.game.seed(), i)
         }
 
-        print!("{}", world.grid.display());
+        print!("{}", world.game.grid().display());
 
         thread::sleep(gen_length);
 
         clear_screen();
 
-        world = world.next();
+        world.game.next();
     }
 
     fn starting_cells(
