@@ -62,10 +62,12 @@ fn main() {
                         seed,
                     }),
                 },
-                // rule if rule.starts_with("brian") => BriansBrain {
-                //     grid: grid.clone(),
-                //     seed,
-                // },
+                rule if rule.starts_with("brian") => World {
+                    game: Box::new(BriansBrain {
+                        grid: grid.clone(),
+                        seed,
+                    }),
+                },
                 rule => panic!("Unknown ruleset: {}", rule),
             })
             .unwrap_or(World {

@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::grid::Grid;
+use crate::world::Generation;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BriansBrain {
@@ -7,11 +8,21 @@ pub struct BriansBrain {
     pub seed: u32,
 }
 
-impl BriansBrain {
-    pub fn next(&self) -> BriansBrain {
-        unimplemented!("todo")
+impl Generation for BriansBrain {
+    fn seed(&self) -> &u32 {
+        &self.seed
     }
 
+    fn grid(&self) -> &Grid {
+        &self.grid
+    }
+
+    fn next(&mut self) {
+        unimplemented!("todo")
+    }
+}
+
+impl BriansBrain {
     pub fn is_dying(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         unimplemented!("todo")
     }
