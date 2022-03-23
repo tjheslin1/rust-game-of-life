@@ -1,6 +1,5 @@
 use crate::cell::Cell;
 use crate::grid::Grid;
-use crate::ruleset::Ruleset;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BriansBrain {
@@ -8,15 +7,11 @@ pub struct BriansBrain {
     pub seed: u32,
 }
 
-impl Ruleset for BriansBrain {
-    type Rules = BriansBrain;
-
-    fn next(&self) -> BriansBrain {
+impl BriansBrain {
+    pub fn next(&self) -> BriansBrain {
         unimplemented!("todo")
     }
-}
 
-impl BriansBrain {
     pub fn is_dying(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         unimplemented!("todo")
     }
@@ -33,8 +28,6 @@ impl BriansBrain {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    use crate::ruleset::Ruleset;
 
     #[test]
     fn world_preserves_seed() {

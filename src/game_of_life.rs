@@ -1,6 +1,5 @@
 use crate::cell::Cell;
 use crate::grid::Grid;
-use crate::ruleset::Ruleset;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct GameOfLife {
@@ -8,10 +7,8 @@ pub struct GameOfLife {
     pub seed: u32,
 }
 
-impl Ruleset for GameOfLife {
-    type Rules = GameOfLife;
-
-    fn next(&self) -> GameOfLife {
+impl GameOfLife {
+    pub fn next(&self) -> GameOfLife {
         let width = self.grid.cells[0].len();
         let height = self.grid.cells.len();
 
@@ -54,9 +51,7 @@ impl Ruleset for GameOfLife {
             ..*self
         }
     }
-}
 
-impl GameOfLife {
     pub fn is_alive(cell: &Cell, neighbours: Vec<&Cell>) -> bool {
         let alive_neighbours_count = neighbours.iter().filter(|&c| c.alive).count();
 
@@ -136,8 +131,6 @@ impl GameOfLife {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    use crate::ruleset::Ruleset;
 
     #[test]
     fn world_preserves_seed() {

@@ -11,13 +11,11 @@ mod cli;
 mod example_worlds;
 mod game_of_life;
 mod grid;
-mod ruleset;
 
 use brians_brain::BriansBrain;
 use cli::Cli;
 use game_of_life::GameOfLife;
 use grid::Grid;
-use ruleset::Ruleset;
 
 /*
     memorable seeds:
@@ -26,7 +24,7 @@ use ruleset::Ruleset;
 fn main() {
     let args = Cli::parse();
 
-    let mut world: dyn Ruleset = if let Some(ref key) = args.preset {
+    let mut world: GameOfLife = if let Some(ref key) = args.preset {
         match example_worlds::find(key) {
             Some(w) => w,
             _ => {
@@ -54,17 +52,17 @@ fn main() {
             starting_cells(seed, width, height, num_starting_cells),
         );
 
-        let result: dyn Ruleset = args
+        let result: GameOfLife = args
             .ruleset
             .map(|r| match r {
                 rule if rule.starts_with("game_of") || rule.starts_with("gameof") => GameOfLife {
                     grid: grid.clone(),
                     seed,
                 },
-                rule if rule.starts_with("brian") => BriansBrain {
-                    grid: grid.clone(),
-                    seed,
-                },
+                // rule if rule.starts_with("brian") => BriansBrain {
+                //     grid: grid.clone(),
+                //     seed,
+                // },
                 rule => panic!("Unknown ruleset: {}", rule),
             })
             .unwrap_or(GameOfLife {
