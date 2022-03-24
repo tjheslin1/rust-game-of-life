@@ -123,7 +123,9 @@ mod tests {
         		(1, 2),  (3, 2),
         		(2, 3),
         	],
+            vec![],
     	);
+
         let mut world = GameOfLife { grid, seed: 0 };
 
         let expected_grid = Grid::new_alive_grid(
@@ -134,6 +136,7 @@ mod tests {
         		(1, 2),  (3, 2),
         		(2, 3),
         	],
+            vec![],
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
@@ -160,6 +163,7 @@ mod tests {
         		(1, 1), (2, 1),
         		(1, 2),
         	],
+            vec![],
     	);
         let mut world = GameOfLife { grid, seed: 0 };
 
@@ -170,6 +174,7 @@ mod tests {
         		(1, 1), (2, 1),
         		(1, 2), (2, 2),
         	],
+            vec![],
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
@@ -197,6 +202,7 @@ mod tests {
         		(0, 1), (1, 1), (2, 1),
         		        (1, 2), (2, 2),
         	],
+            vec![],
     	);
         let mut world = GameOfLife { grid, seed: 0 };
 
@@ -208,6 +214,7 @@ mod tests {
         		(0, 1),
         		(0, 2),         (2, 2),
         	],
+            vec![],
     	);
         let expected_world = GameOfLife { grid: expected_grid, seed: 0 };
 
