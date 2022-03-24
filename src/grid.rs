@@ -22,6 +22,7 @@ impl Grid {
         Grid { cells }
     }
 
+    // TODO: rename
     pub fn new_alive_grid(
         width: u32,
         height: u32,

@@ -94,13 +94,21 @@ mod tests {
 
     */
     #[test]
-    fn update_tiny_world() {
+    fn update_empty_world() {
         let grid = Grid::new(1, 1);
-        let mut world = GameOfLife { grid, seed: 0 };
+        let mut world = GameOfLife {
+            grid: grid.clone(),
+            seed: 0,
+        };
 
         world.next();
 
-        assert_eq!(world, world);
+        let expected_world = GameOfLife {
+            grid: grid.clone(),
+            seed: 0,
+        };
+
+        assert_eq!(world, expected_world);
     }
 
     /*
