@@ -11,6 +11,7 @@ mod cli;
 mod example_worlds;
 mod game_of_life;
 mod grid;
+mod neighbours;
 mod world;
 
 use brians_brain::BriansBrain;
