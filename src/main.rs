@@ -5,26 +5,29 @@ use std::cmp;
 use std::process;
 use std::{thread, time};
 
+mod brians_brain;
 mod cell;
 mod cli;
 mod example_worlds;
+mod game_of_life;
 mod grid;
+mod neighbours;
 mod world;
 
+use brians_brain::BriansBrain;
 use cli::Cli;
+use game_of_life::GameOfLife;
 use grid::Grid;
 use world::World;
 
 /*
     memorable seeds:
-    - 43 (starting cells = 40)
     - 4045 (starting cells = 40)
-    - 3658 (starting cells = 40)
 */
 fn main() {
     let args = Cli::parse();
 
-    let mut world = if let Some(ref key) = args.preset {
+    let mut world: World = if let Some(ref key) = args.preset {
         match example_worlds::find(key) {
             Some(w) => w,
             _ => {
@@ -43,16 +46,38 @@ fn main() {
         let height = args.height.unwrap_or(40);
         let num_starting_cells = args.num_starting_cells.unwrap_or(40);
 
-        World {
-            grid: Grid::new_alive_grid(
-                width,
-                height,
-                args.dead_char.unwrap_or_else(|| ".".to_owned()),
-                args.alive_char.unwrap_or_else(|| "#".to_owned()),
-                starting_cells(seed, width, height, num_starting_cells),
-            ),
-            seed,
-        }
+        let grid = Grid::new_alive_grid(
+            width,
+            height,
+            args.dead_char.unwrap_or_else(|| ".".to_owned()),
+            args.dying_char.unwrap_or_else(|| "x".to_owned()),
+            args.alive_char.unwrap_or_else(|| "#".to_owned()),
+            starting_cells(seed, width, height, num_starting_cells),
+            vec![],
+        );
+
+        args.ruleset
+            .map(|r| match r {
+                rule if rule.starts_with("game_of") || rule.starts_with("gameof") => World {
+                    game: Box::new(GameOfLife {
+                        grid: grid.clone(),
+                        seed,
+                    }),
+                },
+                rule if rule.starts_with("brian") => World {
+                    game: Box::new(BriansBrain {
+                        grid: grid.clone(),
+                        seed,
+                    }),
+                },
+                rule => panic!("Unknown ruleset: {}", rule),
+            })
+            .unwrap_or(World {
+                game: Box::new(GameOfLife {
+                    grid: grid.clone(),
+                    seed,
+                }),
+            })
     };
 
     let gen_length = time::Duration::from_millis(args.gen_length.unwrap_or(250));
@@ -64,16 +89,16 @@ fn main() {
             println!("{}: key = {}", i, preset)
         } else {
             println!("for help: --help");
-            println!("seed = {}; generation = {}", world.seed, i)
+            println!("seed = {}; generation = {}", world.game.seed(), i)
         }
 
-        print!("{}", world.grid.display());
+        print!("{}", world.game.grid().display());
 
         thread::sleep(gen_length);
 
         clear_screen();
 
-        world = world.next();
+        world.game.next();
     }
 
     fn starting_cells(
