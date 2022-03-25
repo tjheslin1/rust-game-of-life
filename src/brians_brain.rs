@@ -69,9 +69,9 @@ impl Simulation for BriansBrain {
     }
 }
 
-// a cell turns on if it was off but had exactly two neighbors that were on
-// All cells that were "on" go into the "dying" state
-// Cells that were in the dying state go into the off state
+// A cell turns on if it was off but had exactly two neighbors that were on.
+// All cells that were "on" go into the "dying" state.
+// Cells that were in the dying state go into the off state.
 impl BriansBrain {
     pub fn is_dying(cell: &Cell) -> bool {
         cell.alive
