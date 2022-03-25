@@ -16,7 +16,7 @@ pub struct Cli {
     /// Default is 40
     #[clap(short, long)]
     pub height: Option<u32>,
-    /// Number of cells that start alive
+    /// Number of cells that start alive, defaults to 40
     #[clap(short, long)]
     pub num_starting_cells: Option<u32>,
     /// A starting seed, to reproduce a previous world
