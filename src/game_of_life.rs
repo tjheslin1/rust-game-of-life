@@ -40,7 +40,7 @@ impl Simulation for GameOfLife {
                             cell.alive_character.clone(),
                         )
                         .set_alive(),
-                    );
+                    )
                 } else {
                     row.push(Cell::new_with_characters(
                         x as u32,
@@ -48,7 +48,7 @@ impl Simulation for GameOfLife {
                         cell.dead_character.clone(),
                         cell.dying_character.clone(),
                         cell.alive_character.clone(),
-                    ));
+                    ))
                 }
             }
             updated_cells.push(row);
